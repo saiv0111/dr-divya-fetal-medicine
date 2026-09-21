@@ -160,7 +160,7 @@ const Reader = ({ slug, onClose }: { slug: string; onClose: () => void }) => {
               <span className="label text-ink-400">{formatDate(post.publishedAt)}</span>
             </div>
 
-            <h1 className="mt-5 font-display text-[2.25rem] leading-[1.05] text-ink-900 md:text-[3rem]">
+            <h1 className="mt-5 font-display text-[2.25rem] leading-[1.14] text-ink-900 md:text-[3rem]">
               {post.title}
             </h1>
             <p className="mt-5 text-lg leading-relaxed text-slate-body">{post.excerpt}</p>
@@ -272,7 +272,7 @@ export const Blog = () => {
       {/* ------------------------------------------------------------ hero */}
       <section className="relative flex min-h-svh items-center overflow-hidden pb-20 pt-28 md:pt-32">
         <div className="shell relative z-10 text-center">
-          <Eyebrow className="justify-center">Journal</Eyebrow>
+          <Eyebrow className="justify-center">Blogs</Eyebrow>
           <SplitWords
             as="h1"
             immediate
@@ -337,7 +337,7 @@ export const Blog = () => {
                   </span>
                   <span className="label text-ink-400">{featured.readingMinutes} min read</span>
                 </div>
-                <h2 className="mt-5 font-display text-[2rem] leading-[1.08] text-ink-900 transition-colors duration-300 group-hover:text-rose-600 md:text-[2.75rem]">
+                <h2 className="mt-5 font-display text-[2rem] leading-[1.14] text-ink-900 transition-colors duration-300 group-hover:text-rose-600 md:text-[2.75rem]">
                   {featured.title}
                 </h2>
                 <p className="mt-5 max-w-[48ch] text-[0.95rem] leading-relaxed text-slate-body">

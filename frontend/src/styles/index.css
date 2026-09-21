@@ -25,14 +25,15 @@
   --color-cream-200: #ebedf0;
   --color-cream-300: #dcdfe4;
 
-  /* Rose — the human, feminine accent */
-  --color-rose-50: #fdf5f3;
-  --color-rose-100: #f8e6e2;
-  --color-rose-200: #efc9c2;
-  --color-rose-300: #e0a79e;
-  --color-rose-400: #cd8479;
-  --color-rose-500: #b8655a;
-  --color-rose-600: #9c4f45;
+  /* Rose — the human, feminine accent. Anchored on #C9584A at 500; the tints
+     mix toward white and 600 toward a warm plum so the scale stays in family. */
+  --color-rose-50: #fcf5f4;
+  --color-rose-100: #f7e8e6;
+  --color-rose-200: #eecac5;
+  --color-rose-300: #e2a59d;
+  --color-rose-400: #d68075;
+  --color-rose-500: #c9584a;
+  --color-rose-600: #ad493d;
 
   /* Sage — tertiary, used sparingly for journey markers */
   --color-sage-200: #cfdbd4;
@@ -91,6 +92,14 @@
     overflow: hidden;
   }
 
+  /* `overflow-x: clip` on body alone does not reliably stop the viewport
+     scrolling; html needs it too. `clip` rather than `hidden` on purpose —
+     hidden would make html a scroll container and break the sticky journey
+     pin, clip does not. */
+  html {
+    overflow-x: clip;
+  }
+
   body {
     background-color: var(--color-page);
     color: var(--color-ink-900);
@@ -109,7 +118,7 @@
     font-family: var(--font-display);
     font-weight: 400;
     letter-spacing: -0.02em;
-    line-height: 1.1;
+    line-height: 1.16;
   }
 
   p {
@@ -165,21 +174,21 @@
 @utility display-xl {
   font-family: var(--font-display);
   font-size: clamp(2.8rem, 6.8vw, 6.2rem);
-  line-height: 1.02;
+  line-height: 1.1;
   letter-spacing: -0.015em;
   font-weight: 400;
 }
 @utility display-lg {
   font-family: var(--font-display);
   font-size: clamp(2.2rem, 4.5vw, 4rem);
-  line-height: 1.05;
+  line-height: 1.12;
   letter-spacing: -0.015em;
   font-weight: 400;
 }
 @utility display-md {
   font-family: var(--font-display);
   font-size: clamp(1.8rem, 2.8vw, 2.5rem);
-  line-height: 1.1;
+  line-height: 1.18;
   letter-spacing: -0.01em;
   font-weight: 400;
 }

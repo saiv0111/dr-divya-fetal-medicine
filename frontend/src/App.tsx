@@ -13,7 +13,7 @@ import { Blog } from '@/pages/Blog';
 
 const TITLES: Record<string, string> = {
   '/': "Dr. Divya · Fetal Medicine & Women's Health",
-  '/blog': "Journal · Dr. Divya Fetal Medicine",
+  '/blog': "Blogs · Dr Divya Fetal Medicine",
 };
 
 /** Resets scroll and document title on navigation (but not on hash links). */

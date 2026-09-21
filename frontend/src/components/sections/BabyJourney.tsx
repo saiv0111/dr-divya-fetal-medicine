@@ -425,7 +425,7 @@ export const BabyJourney = () => {
                     {/* Week heading in website heading font (Baskervville serif) */}
                     <motion.h3
                       key={`${current.week}-label`}
-                      className="num text-4xl leading-none text-rose-500 sm:text-5xl lg:text-[3.25rem]"
+                      className="num text-4xl leading-[1.08] text-rose-500 sm:text-5xl lg:text-[3.25rem]"
                       initial={{ opacity: 0, y: 12 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ duration: 0.45, ease: EASE }}

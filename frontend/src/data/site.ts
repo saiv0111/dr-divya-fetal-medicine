@@ -444,7 +444,7 @@ export const navLinks = [
   { label: 'Services', href: '/#services' },
   { label: 'Journey', href: '/#journey' },
   { label: 'Visit', href: '/#location' },
-  { label: 'Journal', href: '/blog' },
+  { label: 'Blogs', href: '/blog' },
 ] as const;
 
 export const footer = {
@@ -464,7 +464,7 @@ export const footer = {
         { label: 'Credentials', href: '/#credentials' },
         { label: 'Services', href: '/#services' },
         { label: 'Baby’s journey', href: '/#journey' },
-        { label: 'Journal', href: '/blog' },
+        { label: 'Blogs', href: '/blog' },
       ],
     },
     {

@@ -66,7 +66,7 @@ const MapFrame = () => (
 );
 
 export const Location = () => (
-  <section id="location" className="scroll-mt-24 py-10">
+  <section id="location" className="scroll-mt-24 py-10 overflow-x-clip">
     <div className="shell">
       <SectionHeading
         eyebrow="Find Us"

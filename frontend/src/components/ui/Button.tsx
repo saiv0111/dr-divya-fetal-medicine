@@ -5,8 +5,9 @@ export type ButtonVariant = 'primary' | 'secondary' | 'ghost' | 'onDark' | 'outl
 export type ButtonSize = 'md' | 'lg';
 
 const VARIANTS: Record<ButtonVariant, string> = {
+  // Rose fill (#C9584A), sweeping to ink on hover.
   primary:
-    'bg-ink-900 text-cream-100 border-ink-900 hover:border-rose-500 hover:text-cream-50 [--sweep:var(--color-rose-500)]',
+    'bg-rose-500 text-cream-50 border-rose-500 hover:border-ink-900 hover:text-cream-50 [--sweep:var(--color-ink-900)]',
   secondary:
     'bg-transparent text-ink-900 border-ink-900/25 hover:border-ink-900 hover:text-cream-100 [--sweep:var(--color-ink-900)]',
   onDark:
