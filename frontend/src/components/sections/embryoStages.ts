@@ -25,27 +25,27 @@ export interface EmbryoFrame {
 export const EMBRYO_FRAMES: EmbryoFrame[] = [
   {
     week: 8,
-    rel: 0.4,
+    rel: 0.5714,
     src: '/journey/stage-1.svg',
   },
   {
     week: 12,
-    rel: 0.561,
+    rel: 0.6864,
     src: '/journey/stage-2.svg',
   },
   {
     week: 20,
-    rel: 0.658,
+    rel: 0.7557,
     src: '/journey/stage-3.svg',
   },
   {
     week: 28,
-    rel: 0.8029,
+    rel: 0.8592,
     src: '/journey/stage-4.svg',
   },
   {
     week: 36,
-    rel: 0.9013,
+    rel: 0.9295,
     src: '/journey/stage-5.svg',
   },
   {

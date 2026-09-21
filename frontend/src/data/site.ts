@@ -358,18 +358,6 @@ export const testimonials = {
       name: 'Meera & Arjun',
       context: 'Recurrent loss · early monitoring',
     },
-    {
-      quote:
-        'My baby was measuring small at 30 weeks. Instead of being told to “wait and see”, I got a Doppler, a trend line and a clear plan for what would change the plan. Being included in the reasoning made all the difference.',
-      name: 'Fatima R.',
-      context: 'Growth surveillance',
-    },
-    {
-      quote:
-        'She spotted a cardiac anomaly at twenty-two weeks and had paediatric cardiology on the phone before we left the room. Our son had surgery at four days old. We know how much that head start mattered.',
-      name: 'Divya & Karthik',
-      context: 'Fetal echocardiography',
-    },
   ],
 } as const;
 

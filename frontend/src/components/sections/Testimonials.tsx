@@ -6,12 +6,10 @@ import { Eyebrow } from '@/components/ui/SectionHeading';
 import { SplitWords } from '@/components/ui/SplitWords';
 
 const testimonialImages = [
-  '/patient_portrait_1.png',
-  '/pregnant-lady.png',
-  '/patient_portrait_2.png',
-  '/doc-image.png',
-  '/patient_portrait_1.png',
-  '/patient_portrait_2.png',
+  '/patient_portrait_ananya_rohit.png',
+  '/patient_portrait_priya.png',
+  '/patient_portrait_sneha.png',
+  '/patient_portrait_meera_arjun.png',
 ];
 
 const Star = ({ className }: { className?: string }) => (
@@ -27,14 +25,19 @@ export const Testimonials = () => {
   const items = testimonials.items;
   const total = items.length;
 
+  const isFirst = currentIndex === 0;
+  const isLast = currentIndex === total - 1;
+
   const handlePrev = () => {
+    if (isFirst) return;
     setDirection(-1);
-    setCurrentIndex((prev) => (prev === 0 ? total - 1 : prev - 1));
+    setCurrentIndex((prev) => prev - 1);
   };
 
   const handleNext = () => {
+    if (isLast) return;
     setDirection(1);
-    setCurrentIndex((prev) => (prev === total - 1 ? 0 : prev + 1));
+    setCurrentIndex((prev) => prev + 1);
   };
 
   const currentItem = items[currentIndex];
@@ -77,20 +80,22 @@ export const Testimonials = () => {
             <button
               type="button"
               onClick={handlePrev}
+              disabled={isFirst}
               aria-label="Previous testimonial"
-              className="group grid size-12 place-items-center rounded-full border border-ink-900/15 bg-cream-50 text-ink-900 shadow-sm transition-all hover:border-ink-900 hover:bg-ink-900 hover:text-cream-50 active:scale-95"
+              className="group grid size-12 place-items-center rounded-full border border-ink-900/15 bg-cream-50 text-ink-900 shadow-sm transition-all hover:border-ink-900 hover:bg-ink-900 hover:text-cream-50 active:scale-95 disabled:opacity-35 disabled:cursor-not-allowed disabled:hover:border-ink-900/15 disabled:hover:bg-cream-50 disabled:hover:text-ink-900 disabled:active:scale-100"
             >
-              <svg className="size-5 transition-transform group-hover:-translate-x-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <svg className="size-5 transition-transform group-hover:-translate-x-0.5 group-disabled:translate-x-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M19 12H5M12 19l-7-7 7-7" />
               </svg>
             </button>
             <button
               type="button"
               onClick={handleNext}
+              disabled={isLast}
               aria-label="Next testimonial"
-              className="group grid size-12 place-items-center rounded-full border border-ink-900/15 bg-cream-50 text-ink-900 shadow-sm transition-all hover:border-ink-900 hover:bg-ink-900 hover:text-cream-50 active:scale-95"
+              className="group grid size-12 place-items-center rounded-full border border-ink-900/15 bg-cream-50 text-ink-900 shadow-sm transition-all hover:border-ink-900 hover:bg-ink-900 hover:text-cream-50 active:scale-95 disabled:opacity-35 disabled:cursor-not-allowed disabled:hover:border-ink-900/15 disabled:hover:bg-cream-50 disabled:hover:text-ink-900 disabled:active:scale-100"
             >
-              <svg className="size-5 transition-transform group-hover:translate-x-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <svg className="size-5 transition-transform group-hover:translate-x-0.5 group-disabled:translate-x-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M5 12h14M12 5l7 7-7 7" />
               </svg>
             </button>

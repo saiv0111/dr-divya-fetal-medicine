@@ -89,10 +89,16 @@ const useScanStage = (): [React.RefObject<HTMLDivElement>, StageHandle] => {
   return [rootRef, { apply }];
 };
 
-const GROWTH = 2.6;
+/* Caps how large the final stage renders. Measured against the card beside
+   it: the artwork is centred, so artTop = paneCentre - (baseSide * scale) / 6.
+   Above ~1.88 the week-40 drawing rises past the top of the card. */
+const GROWTH = 1.82;
 
 const ScanStage = ({ stageRef }: { stageRef: React.RefObject<HTMLDivElement> }) => (
-  <div ref={stageRef} className="relative z-[2] size-full">
+  /* pointer-events-none is load-bearing: the images scale up to ~1100px and
+     overlap the week rail underneath, which silently swallowed every click
+     once the artwork grew past the first stage. Nothing here is interactive. */
+  <div ref={stageRef} className="pointer-events-none relative z-[2] size-full">
     {/* Growth lives here as a single continuous scale, exactly as before; only
         the artwork underneath changed from inline paths to static files. The
         drop shadow sits on the images rather than this wrapper because
