@@ -198,7 +198,7 @@ export const Footer = () => {
               textLength="1000"
               lengthAdjust="spacing"
               fontSize="150"
-              className="fill-cream-100/10 font-display"
+              className="fill-cream-100/16 font-display"
             >
               Fetal Medicine
             </text>

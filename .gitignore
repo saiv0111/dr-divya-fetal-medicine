@@ -14,3 +14,9 @@ frontend/src/**/*.js
 frontend/src/**/*.js.map
 frontend/src/**/*.d.ts
 !frontend/src/vite-env.d.ts
+
+# Compiled output that shadows the TypeScript source. Vite resolves
+# vite.config.js before vite.config.ts, so a stale one silently wins.
+frontend/vite.config.js
+shared/src/**/*.js
+shared/src/**/*.js.map

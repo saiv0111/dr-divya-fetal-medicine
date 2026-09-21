@@ -65,99 +65,59 @@ interface StageHandle {
   apply: (position: number) => void;
 }
 
-const useScanStage = (): [React.RefObject<SVGSVGElement>, StageHandle] => {
-  const svgRef = useRef<SVGSVGElement>(null);
+const useScanStage = (): [React.RefObject<HTMLDivElement>, StageHandle] => {
+  const rootRef = useRef<HTMLDivElement>(null);
 
   const apply = useCallback((position: number) => {
-    const svg = svgRef.current;
-    if (!svg) return;
+    const root = rootRef.current;
+    if (!root) return;
 
     const last = EMBRYO_FRAMES.length - 1;
     const p = Math.max(0, Math.min(last, position));
     const i = Math.min(last - 1, Math.floor(p));
 
     const rel = lerp(EMBRYO_FRAMES[i]!.rel, EMBRYO_FRAMES[i + 1]!.rel, p - i);
-    const wrapper = svg.querySelector<SVGGElement>('#embryoScale');
-    wrapper?.setAttribute(
-      'transform',
-      `translate(150 150) scale(${(rel * GROWTH).toFixed(4)}) translate(-150 -150)`,
-    );
+    const wrapper = root.querySelector<HTMLElement>('#embryoScale');
+    if (wrapper) wrapper.style.transform = `scale(${(rel * GROWTH).toFixed(4)})`;
 
     const shown = Math.round(p);
-    svg.querySelectorAll<SVGGElement>('.embryo-frame').forEach((group, index) => {
-      group.style.display = index === shown ? '' : 'none';
+    root.querySelectorAll<HTMLElement>('.embryo-frame').forEach((frame, index) => {
+      frame.style.opacity = index === shown ? '1' : '0';
     });
   }, []);
 
-  return [svgRef, { apply }];
+  return [rootRef, { apply }];
 };
 
 const GROWTH = 2.6;
 
-const ScanStage = ({ svgRef }: { svgRef: React.RefObject<SVGSVGElement> }) => (
-  <svg
-    ref={svgRef}
-    viewBox="0 0 300 300"
-    className="relative z-[2] size-full overflow-visible"
-    aria-hidden
-  >
-    <defs>
-      {/* Warm depth on the sac so the flat artwork does not read as a sticker. */}
-      <radialGradient id="sacGrad" cx="42%" cy="36%" r="72%">
-        <stop offset="0%" stopColor="#f4918a" />
-        <stop offset="70%" stopColor="#ea7c73" />
-        <stop offset="100%" stopColor="#de695d" />
-      </radialGradient>
-      <radialGradient id="fluidGrad" cx="42%" cy="36%" r="70%">
-        <stop offset="0%" stopColor="#fcd6d5" />
-        <stop offset="100%" stopColor="#f4c1be" />
-      </radialGradient>
-      <linearGradient id="babyGrad" x1="0.15" y1="0" x2="0.8" y2="1">
-        <stop offset="0%" stopColor="#fffaf9" />
-        <stop offset="100%" stopColor="#fde2dd" />
-      </linearGradient>
-      <filter id="wombShadow" x="-25%" y="-25%" width="150%" height="150%">
-        <feDropShadow dx="0" dy="6" stdDeviation="9" floodColor="#8a4a40" floodOpacity="0.16" />
-      </filter>
-    </defs>
-
-    {/* No backdrop: the womb itself is the shape. Paint order is
-        sac → fluid → baby → line art, exactly as the artwork was drawn. */}
-    <g id="embryoScale" className="fetus-shape">
-      <g filter="url(#wombShadow)">
-        {EMBRYO_FRAMES.map((frame, index) => (
-          <g
-            key={frame.week}
-            className="embryo-frame"
-            transform={frame.transform}
-            style={{ display: index === 0 ? '' : 'none' }}
-          >
-            {frame.sac.map((d, i) => (
-              <path key={`s${i}`} d={d} fill="url(#sacGrad)" />
-            ))}
-            {frame.fluid.map((d, i) => (
-              <path key={`f${i}`} d={d} fill="url(#fluidGrad)" />
-            ))}
-            {frame.bodies.map((d, i) => (
-              <path key={`b${i}`} d={d} fill="url(#babyGrad)" />
-            ))}
-            {frame.lines.map((d, i) => (
-              <path
-                key={`l${i}`}
-                d={d}
-                fill="none"
-                stroke="#8f4a40"
-                strokeWidth={frame.strokeWidth}
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                opacity="0.8"
-              />
-            ))}
-          </g>
-        ))}
-      </g>
-    </g>
-  </svg>
+const ScanStage = ({ stageRef }: { stageRef: React.RefObject<HTMLDivElement> }) => (
+  <div ref={stageRef} className="relative z-[2] size-full">
+    {/* Growth lives here as a single continuous scale, exactly as before; only
+        the artwork underneath changed from inline paths to static files. The
+        drop shadow sits on the images rather than this wrapper because
+        `.fetus-shape` animates the filter property and would override it. */}
+    <div
+      id="embryoScale"
+      className="fetus-shape absolute inset-0 origin-center will-change-transform"
+    >
+      {EMBRYO_FRAMES.map((frame, index) => (
+        <img
+          key={frame.week}
+          className="embryo-frame absolute inset-0 size-full object-contain transition-opacity duration-200"
+          style={{
+            opacity: index === 0 ? 1 : 0,
+            filter: 'drop-shadow(0 6px 9px rgb(138 74 64 / 0.16))',
+          }}
+          src={frame.src}
+          alt=""
+          aria-hidden
+          decoding="async"
+          loading="eager"
+        />
+      ))}
+    </div>
+  </div>
 );
 
 /* -------------------------------------------------------------------------- */
@@ -169,7 +129,7 @@ const STAGE_COUNT = journey.stages.length;
 export const BabyJourney = () => {
   const { open } = useBooking();
   const scrollRef = useRef<HTMLDivElement>(null);
-  const [svgRef, stage] = useScanStage();
+  const [stageRef, stage] = useScanStage();
   const isDesktop = useIsDesktop();
   const reduced = useReducedMotion();
   const pinned = isDesktop && !reduced;
@@ -280,7 +240,7 @@ export const BabyJourney = () => {
                 transition={{ duration: 0.9, ease: EASE }}
               >
                 <div className="relative mx-auto flex aspect-square w-full max-w-[27.5rem] items-center justify-center">
-                  <ScanStage svgRef={svgRef} />
+                  <ScanStage stageRef={stageRef} />
 
                   {pinned && (
                     <span
@@ -294,26 +254,152 @@ export const BabyJourney = () => {
                   )}
                 </div>
 
-                {/* Week Pills */}
+                {/* Week selector.
+                    When the section is pinned, page scroll drives it and the
+                    rail is mainly an indicator, so it can stay understated.
+                    When it is not pinned — touch widths and reduced motion —
+                    tapping is the ONLY way to move, so each node becomes a full
+                    44px button with the number inside, plus prev/next arrows. */}
                 <div
-                  className={cn('flex flex-wrap justify-center gap-1.5', pinned ? 'mt-16' : 'mt-8')}
+                  className={cn(
+                    'relative mx-auto w-full px-1',
+                    pinned ? 'mt-16 max-w-[34rem]' : 'mt-8 max-w-[30rem]',
+                  )}
+                  role="tablist"
+                  aria-label="Gestational weeks"
                 >
-                  {journey.stages.map((item, index) => (
-                    <button
-                      key={item.week}
-                      type="button"
-                      onClick={() => selectStage(index)}
-                      aria-current={index === active}
-                      className={cn(
-                        'rounded-full border-[1.5px] px-3.5 py-2.5 text-[0.73rem] font-bold whitespace-nowrap transition-all duration-300',
-                        index === active
-                          ? 'border-ink-900 bg-ink-900 text-cream-100 shadow-lift'
-                          : 'border-ink-900/25 text-slate-body hover:border-rose-400 hover:text-rose-500',
-                      )}
-                    >
-                      {item.week}
-                    </button>
-                  ))}
+                  {/* Track sits at node-centre height, inset to the outer centres. */}
+                  <span
+                    aria-hidden
+                    className={cn(
+                      'pointer-events-none absolute h-px bg-ink-900/12',
+                      pinned
+                        ? 'left-[11px] right-[11px] top-[9px]'
+                        : 'left-[26px] right-[26px] top-[22px]',
+                    )}
+                  />
+                  <motion.span
+                    aria-hidden
+                    className={cn(
+                      'pointer-events-none absolute h-px origin-left bg-rose-400',
+                      pinned
+                        ? 'left-[11px] right-[11px] top-[9px]'
+                        : 'left-[26px] right-[26px] top-[22px]',
+                    )}
+                    initial={false}
+                    animate={{ scaleX: active / Math.max(journey.stages.length - 1, 1) }}
+                    transition={{ duration: 0.45, ease: EASE }}
+                  />
+
+                  <div className="relative flex items-start justify-between">
+                    {journey.stages.map((item, index) => {
+                      const isActive = index === active;
+                      const isPassed = index < active;
+
+                      if (!pinned) {
+                        return (
+                          <button
+                            key={item.week}
+                            type="button"
+                            role="tab"
+                            onClick={() => selectStage(index)}
+                            aria-selected={isActive}
+                            aria-label={item.week}
+                            className={cn(
+                              'num grid size-11 shrink-0 place-items-center rounded-full border text-[0.8125rem] transition-all duration-300 active:scale-95',
+                              isActive
+                                ? 'border-ink-900 bg-ink-900 font-medium text-cream-100 shadow-lift'
+                                : isPassed
+                                  ? 'border-rose-300 bg-rose-50 text-rose-600'
+                                  : 'border-ink-900/20 bg-page text-slate-body',
+                            )}
+                          >
+                            {item.week.replace('Week ', '')}
+                          </button>
+                        );
+                      }
+
+                      return (
+                        <button
+                          key={item.week}
+                          type="button"
+                          role="tab"
+                          onClick={() => selectStage(index)}
+                          aria-selected={isActive}
+                          aria-label={item.week}
+                          className="group/week flex flex-col items-center gap-2.5 outline-offset-4"
+                        >
+                          <span
+                            aria-hidden
+                            className={cn(
+                              'mt-[2px] block size-[14px] rounded-full border-[1.5px] transition-all duration-300',
+                              isActive
+                                ? 'scale-125 border-rose-500 bg-rose-500 shadow-[0_0_0_4px_var(--color-rose-100)]'
+                                : isPassed
+                                  ? 'border-rose-400 bg-rose-400'
+                                  : 'border-ink-900/25 bg-page group-hover/week:border-rose-400 group-hover/week:bg-rose-100',
+                            )}
+                          />
+                          <span
+                            className={cn(
+                              'num whitespace-nowrap text-[0.75rem] transition-colors duration-300',
+                              isActive
+                                ? 'font-medium text-ink-900'
+                                : 'text-slate-muted group-hover/week:text-rose-500',
+                            )}
+                          >
+                            {item.week.replace('Week ', '')}
+                          </span>
+                        </button>
+                      );
+                    })}
+                  </div>
+
+                  {pinned ? (
+                    <p className="label mt-3 text-center text-[0.6rem] text-slate-muted">
+                      Gestational week
+                    </p>
+                  ) : (
+                    <div className="mt-5 flex items-center justify-center gap-3">
+                      <button
+                        type="button"
+                        onClick={() => selectStage(Math.max(active - 1, 0))}
+                        disabled={active === 0}
+                        aria-label="Previous week"
+                        className="grid size-9 place-items-center rounded-full border border-ink-900/15 text-ink-700 transition-transform active:scale-95 disabled:opacity-30"
+                      >
+                        <svg viewBox="0 0 16 16" aria-hidden className="size-3.5">
+                          <path
+                            d="M10 3L5 8l5 5"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="1.6"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          />
+                        </svg>
+                      </button>
+                      <p className="label text-[0.6rem] text-slate-muted">Tap a week</p>
+                      <button
+                        type="button"
+                        onClick={() => selectStage(Math.min(active + 1, journey.stages.length - 1))}
+                        disabled={active === journey.stages.length - 1}
+                        aria-label="Next week"
+                        className="grid size-9 place-items-center rounded-full border border-ink-900/15 text-ink-700 transition-transform active:scale-95 disabled:opacity-30"
+                      >
+                        <svg viewBox="0 0 16 16" aria-hidden className="size-3.5">
+                          <path
+                            d="M6 3l5 5-5 5"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="1.6"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          />
+                        </svg>
+                      </button>
+                    </div>
+                  )}
                 </div>
               </motion.div>
 

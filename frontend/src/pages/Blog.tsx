@@ -1,8 +1,8 @@
 import { forwardRef, useCallback, useEffect, useMemo, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
-import type { Post, PostSummary } from '@drdivya/shared';
-import { api } from '@/lib/api';
+import type { PostSummary } from '@drdivya/shared';
+import { getPost, listPosts } from '@/data/posts';
 import { EASE, viewportOnce } from '@/lib/motion';
 import { cn, formatDate } from '@/lib/utils';
 import { lockScroll } from '@/hooks/useLenis';
@@ -93,21 +93,10 @@ PostCard.displayName = 'PostCard';
 /* -------------------------------------------------------------------------- */
 
 const Reader = ({ slug, onClose }: { slug: string; onClose: () => void }) => {
-  const [post, setPost] = useState<Post | null>(null);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    let cancelled = false;
-    setPost(null);
-    setError(null);
-    api
-      .getPost(slug)
-      .then((data) => !cancelled && setPost(data))
-      .catch((err: Error) => !cancelled && setError(err.message));
-    return () => {
-      cancelled = true;
-    };
-  }, [slug]);
+  // Articles ship with the bundle, so there is nothing to await — a missing
+  // slug is the only failure case left.
+  const post = useMemo(() => getPost(slug) ?? null, [slug]);
+  const error = post ? null : 'That article could not be found.';
 
   useEffect(() => {
     lockScroll(true);
@@ -161,15 +150,6 @@ const Reader = ({ slug, onClose }: { slug: string; onClose: () => void }) => {
           <p role="alert" className="mx-auto max-w-2xl text-center text-slate-body">
             {error}
           </p>
-        )}
-
-        {!post && !error && (
-          <div className="mx-auto max-w-2xl animate-pulse space-y-4" aria-busy>
-            <div className="h-3 w-24 rounded bg-ink-900/8" />
-            <div className="h-10 w-full rounded bg-ink-900/8" />
-            <div className="h-10 w-4/5 rounded bg-ink-900/8" />
-            <div className="mt-10 h-56 w-full rounded-2xl bg-ink-900/6" />
-          </div>
         )}
 
         {post && (
@@ -262,29 +242,11 @@ const BookCta = () => {
 
 export const Blog = () => {
   const [searchParams, setSearchParams] = useSearchParams();
-  const [posts, setPosts] = useState<PostSummary[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
   const [category, setCategory] = useState('all');
 
   const openSlug = searchParams.get('post');
 
-  useEffect(() => {
-    let cancelled = false;
-    setLoading(true);
-    api
-      .listPosts()
-      .then((data) => {
-        if (cancelled) return;
-        setPosts(data);
-        setError(null);
-      })
-      .catch((err: Error) => !cancelled && setError(err.message))
-      .finally(() => !cancelled && setLoading(false));
-    return () => {
-      cancelled = true;
-    };
-  }, []);
+  const posts = useMemo(() => listPosts(), []);
 
   const categories = useMemo(
     () => ['all', ...new Set(posts.map((post) => post.category))],
@@ -308,9 +270,9 @@ export const Blog = () => {
   return (
     <>
       {/* ------------------------------------------------------------ hero */}
-      <section className="relative overflow-hidden pb-16 pt-32 md:pb-20 md:pt-40">
-        <div className="shell relative z-10">
-          <Eyebrow>Journal</Eyebrow>
+      <section className="relative flex min-h-svh items-center overflow-hidden pb-20 pt-28 md:pt-32">
+        <div className="shell relative z-10 text-center">
+          <Eyebrow className="justify-center">Journal</Eyebrow>
           <SplitWords
             as="h1"
             immediate
@@ -323,10 +285,10 @@ export const Blog = () => {
               { text: 'read', accent: true },
               { text: 'up.' },
             ]}
-            className="display-xl mt-6 max-w-[14ch] text-ink-900"
+            className="display-xl mx-auto mt-6 max-w-[16ch] text-ink-900"
           />
           <motion.p
-            className="mt-7 max-w-[54ch] text-base leading-relaxed text-slate-body"
+            className="mx-auto mt-7 max-w-[54ch] text-base leading-relaxed text-slate-body"
             initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, ease: EASE, delay: 0.5 }}
@@ -353,27 +315,7 @@ export const Blog = () => {
       {/* ------------------------------------------------------- featured */}
       <section className="py-16 md:py-24">
         <div className="shell">
-          {error && (
-            <div role="alert" className="rounded-2xl border border-rose-200 bg-rose-50 p-8 text-center">
-              <p className="font-display text-xl text-ink-900">We couldn’t load the journal</p>
-              <p className="mt-2 text-sm text-slate-body">{error}</p>
-            </div>
-          )}
-
-          {loading && (
-            <div className="grid gap-8 md:grid-cols-3" aria-busy>
-              {Array.from({ length: 3 }).map((_, i) => (
-                <div key={i} className="animate-pulse space-y-4">
-                  <div className="aspect-[4/3] rounded-2xl bg-ink-900/6" />
-                  <div className="h-3 w-24 rounded bg-ink-900/8" />
-                  <div className="h-5 w-full rounded bg-ink-900/8" />
-                  <div className="h-5 w-3/4 rounded bg-ink-900/8" />
-                </div>
-              ))}
-            </div>
-          )}
-
-          {!loading && featured && category === 'all' && (
+          {featured && category === 'all' && (
             <motion.button
               type="button"
               onClick={() => openPost(featured.slug)}
@@ -448,7 +390,7 @@ export const Blog = () => {
             </AnimatePresence>
           </motion.div>
 
-          {!loading && rest.length === 0 && (
+          {rest.length === 0 && (
             <p className="py-20 text-center text-slate-body">
               Nothing filed under this topic yet — check back soon.
             </p>

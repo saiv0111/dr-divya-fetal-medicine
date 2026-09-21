@@ -9,10 +9,13 @@ import type { SERVICE_IDS } from '@drdivya/shared';
  */
 
 export const doctor = {
-  name: 'Dr. Divya',
+  name: 'Dr Divya Laxmi S V',
+  /** Short form for buttons and running copy. */
+  shortName: 'Dr Divya',
   /** Shown under the name in the about + footer blocks. */
   credentials: 'MBBS · MS (Obstetrics & Gynaecology) · Fellowship in Fetal Medicine',
-  role: 'Consultant Fetal Medicine Specialist',
+  role: 'Fetal Medicine Specialist',
+  /** TODO — still a placeholder; supply the real council registration number. */
   registration: 'Medical Council Reg. No. 00000',
 } as const;
 
@@ -64,15 +67,11 @@ export const hero = {
     stat: '4.9/5',
     text: 'from 1,200+ families under our care',
   },
-  floatingBadges: [
-    { title: 'FMF UK', subtitle: 'Accredited practitioner' },
-    { title: '11–13+6', subtitle: 'NT screening window' },
-  ],
 } as const;
 
 export const trustMarquee = [
-  'Fetal Medicine Foundation, UK',
-  'ISUOG guidelines',
+  'MS Obstetrics & Gynaecology',
+  'Fellowship-trained in fetal medicine',
   'Nuchal translucency screening',
   'Fetal echocardiography',
   'Doppler & growth surveillance',
@@ -91,7 +90,7 @@ export const about = {
   /** Rendered with a scroll-linked word highlight — keep it to a few sentences. */
   narrative:
     'I trained in fetal medicine because I kept meeting parents handed a report and no explanation. They knew a measurement was flagged; nobody had told them what it meant. That gap is where worry grows, so this practice is built around closing it.',
-  signatureLine: 'Consultant Fetal Medicine Specialist',
+  signatureLine: 'Fetal Medicine Specialist',
   facts: [
     { label: 'Practising since', value: '2014' },
     { label: 'Scans performed', value: '24,000+' },
@@ -112,23 +111,23 @@ export const certifications = {
   items: [
     {
       id: '01',
-      title: 'A Decade in Fetal Medicine',
-      body: 'Eleven years practising prenatal diagnosis exclusively — not as a sideline to general obstetrics, but as the whole job.',
+      title: 'MBBS',
+      body: 'Bachelor of Medicine and Bachelor of Surgery, Mamata Medical College.',
     },
     {
       id: '02',
-      title: 'FMF UK Certified',
-      body: 'Licensed to Fetal Medicine Foundation (London) standards, with annual audit of measurement accuracy and risk calculation.',
+      title: 'MS · Obstetrics & Gynaecology',
+      body: 'Postgraduate specialisation at Pinnamaneni Siddhartha Medical College.',
     },
     {
       id: '03',
-      title: 'ISUOG-Aligned Protocols',
-      body: 'Every examination follows the International Society of Ultrasound in Obstetrics & Gynecology practice guidelines, end to end.',
+      title: 'Fellowship in Fetal Medicine',
+      body: 'A two-year fellowship at Resolution Fetal Medicine Centre, dedicated entirely to prenatal diagnosis.',
     },
     {
       id: '04',
-      title: 'Current-Generation Imaging',
-      body: 'High-resolution 2D, colour and pulsed-wave Doppler, 4D volume imaging and dedicated fetal cardiac presets.',
+      title: 'Trained Under Dr Chinmayee Ratha',
+      body: 'Fellowship training with one of the country’s established fetal medicine specialists.',
     },
     {
       id: '05',

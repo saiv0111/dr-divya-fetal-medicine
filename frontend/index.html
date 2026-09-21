@@ -18,11 +18,13 @@
       property="og:description"
       content="Consultant-led fetal medicine. Advanced diagnostics, unhurried explanations, and care that stays with you through every scan."
     />
-    <meta property="og:image" content="/pregnant-lady.png" />
+    <meta property="og:image" content="/pregnant-women-hero.png" />
     <meta name="twitter:card" content="summary_large_image" />
 
-    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-    <link rel="apple-touch-icon" href="/pregnant-lady.png" />
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="icon" href="/favicon-32.png" type="image/png" sizes="32x32" />
+    <link rel="icon" href="/icon-512.png" type="image/png" sizes="512x512" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -30,22 +32,51 @@
       rel="stylesheet"
       href="https://fonts.googleapis.com/css2?family=Baskervville:ital@0;1&family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@300;400;500;600;700&display=swap"
     />
-    <link rel="preload" as="image" href="/pregnant-lady.png" fetchpriority="high" />
+    <link rel="preload" as="image" href="/pregnant-women-hero.png" fetchpriority="high" />
 
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
         "@type": "MedicalClinic",
-        "name": "Dr. Divya · Fetal Medicine",
+        "name": "Dr Divya's Fetal Medicine Centre",
         "medicalSpecialty": ["Obstetric", "PrenatalDiagnosis"],
         "url": "https://drdivyafetalmedicine.com/",
         "telephone": "+91 98765 43210",
+        "physician": {
+          "@type": "Physician",
+          "name": "Dr Divya Laxmi S V",
+          "jobTitle": "Fetal Medicine Specialist",
+          "medicalSpecialty": ["Obstetric", "PrenatalDiagnosis"],
+          "alumniOf": [
+            { "@type": "CollegeOrUniversity", "name": "Mamata Medical College" },
+            { "@type": "CollegeOrUniversity", "name": "Pinnamaneni Siddhartha Medical College" }
+          ],
+          "hasCredential": [
+            {
+              "@type": "EducationalOccupationalCredential",
+              "credentialCategory": "degree",
+              "name": "MBBS",
+              "educationalLevel": "Bachelor of Medicine, Bachelor of Surgery"
+            },
+            {
+              "@type": "EducationalOccupationalCredential",
+              "credentialCategory": "degree",
+              "name": "MS Obstetrics & Gynaecology"
+            },
+            {
+              "@type": "EducationalOccupationalCredential",
+              "credentialCategory": "fellowship",
+              "name": "Fellowship in Fetal Medicine",
+              "recognizedBy": { "@type": "Organization", "name": "Resolution Fetal Medicine Centre" }
+            }
+          ]
+        },
         "address": {
           "@type": "PostalAddress",
-          "streetAddress": "3rd Floor, Meridian Health Plaza, 14 Lakeview Avenue",
-          "addressLocality": "Bengaluru",
-          "addressRegion": "Karnataka",
-          "postalCode": "560001",
+          "streetAddress": "D.No. 5-50/1/A, Shiva Vijaya Ratna Jewel, 2nd Floor, Beside Indane Gas, BHEL X Roads, Chanda Nagar",
+          "addressLocality": "Hyderabad",
+          "addressRegion": "Telangana",
+          "postalCode": "500050",
           "addressCountry": "IN"
         },
         "openingHoursSpecification": [
@@ -69,7 +100,7 @@
     <div id="root"></div>
     <noscript>
       <div style="padding: 3rem; font-family: system-ui; max-width: 40rem; margin: 0 auto">
-        <h1>Dr. Divya · Fetal Medicine &amp; Women's Health</h1>
+        <h1>Dr Divya Laxmi S V · Fetal Medicine &amp; Women's Health</h1>
         <p>
           This site needs JavaScript enabled. To book an appointment, please call
           <a href="tel:+919876543210">+91 98765 43210</a> or email

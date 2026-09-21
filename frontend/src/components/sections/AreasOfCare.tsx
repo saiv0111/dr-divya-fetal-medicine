@@ -37,7 +37,8 @@ const careData = {
       }
     ] as CareItem[],
     ctaText: "Book a scan",
-    video: "/pregnant-lady-video.mp4"
+    video: "/pregnant-lady-video.mp4",
+    poster: "/pregnant-lady-poster.jpg"
   },
   gynaecology: {
     id: 'gynaecology',
@@ -63,7 +64,8 @@ const careData = {
       }
     ] as CareItem[],
     ctaText: "Discuss your care",
-    video: "/gynaecology-video.mp4"
+    video: "/gynaecology-video.mp4",
+    poster: "/gynaecology-poster.jpg"
   }
 };
 
@@ -75,7 +77,7 @@ export const AreasOfCare = () => {
   const current = careData[activeTab];
 
   return (
-    <section id="areas-of-care" className="scroll-mt-24 pt-20 pb-10">
+    <section id="services" className="scroll-mt-24 pt-20 pb-10">
       <div className="shell">
         {/* Section Header */}
         <div className="text-center max-w-2xl mx-auto">
@@ -151,36 +153,45 @@ export const AreasOfCare = () => {
 
           {/* Tab Content (Grid Layout) */}
           <div className="mt-10 sm:mt-14">
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={activeTab}
-                initial={{ opacity: 0, x: activeTab === 'pregnancy' ? -20 : 20 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: activeTab === 'pregnancy' ? 20 : -20 }}
-                transition={{ duration: 0.4, ease: EASE }}
-                className="grid gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:gap-14 items-start"
-              >
-                {/* Left Side: looping clip for the active area of care */}
-                <div className="relative overflow-hidden rounded-2xl border border-ink-900/5 bg-[#e5ece8] aspect-[4/3] w-full min-h-[320px] shadow-inner sm:aspect-[1.1/1] sm:min-h-[380px]">
+            <div className="grid gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:gap-14 items-start">
+              {/* Left Side: both clips stay mounted and crossfade.
+                  Unmounting them on tab change threw away the decoded video and
+                  made the card flash its background colour on every switch. The
+                  poster is each clip's own first frame, so there is nothing
+                  visible to "swap" once the video starts. */}
+              <div className="relative overflow-hidden rounded-2xl border border-ink-900/5 bg-[#e5ece8] aspect-[4/3] w-full min-h-[320px] shadow-inner sm:aspect-[1.1/1] sm:min-h-[380px]">
+                {(Object.keys(careData) as CareTab[]).map((tab) => (
                   <video
-                    key={current.video}
-                    src={current.video}
+                    key={tab}
+                    src={careData[tab].video}
+                    poster={careData[tab].poster}
                     autoPlay
                     loop
                     muted
                     playsInline
-                    preload="metadata"
+                    preload="auto"
                     aria-hidden
-                    className="absolute inset-0 size-full rounded-2xl object-cover object-center"
+                    className={`absolute inset-0 size-full rounded-2xl object-cover object-center transition-opacity duration-500 ${
+                      activeTab === tab ? 'opacity-100' : 'opacity-0'
+                    }`}
                   />
-                  <div
-                    aria-hidden
-                    className="pointer-events-none absolute inset-0 rounded-2xl bg-gradient-to-t from-ink-950/20 via-transparent to-transparent"
-                  />
-                </div>
+                ))}
+                <div
+                  aria-hidden
+                  className="pointer-events-none absolute inset-0 rounded-2xl bg-gradient-to-t from-ink-950/20 via-transparent to-transparent"
+                />
+              </div>
 
-                {/* Right Side: Text & Interactive Features List */}
-                <div className="flex flex-col justify-between self-stretch">
+              {/* Right Side: Text & Interactive Features List */}
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={activeTab}
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -20 }}
+                  transition={{ duration: 0.4, ease: EASE }}
+                  className="flex flex-col justify-between self-stretch"
+                >
                   <div>
                     <span className="label text-[0.6875rem] uppercase tracking-widest text-rose-500/90 font-semibold">
                       {current.badge}
@@ -256,9 +267,9 @@ export const AreasOfCare = () => {
                       {current.ctaText}
                     </Button>
                   </div>
-                </div>
-              </motion.div>
-            </AnimatePresence>
+                </motion.div>
+              </AnimatePresence>
+            </div>
           </div>
         </motion.div>
       </div>

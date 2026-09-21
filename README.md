@@ -1,8 +1,9 @@
 # Dr. Divya · Fetal Medicine
 
 Marketing site for a consultant-led fetal medicine and women's healthcare practice.
-Two pages — a long-form animated homepage and a journal — backed by a small
-Express API for enquiries and article content.
+Two pages — a long-form animated homepage and a journal. It deploys as a static
+site plus three serverless functions, which exist only to email enquiries: that
+is the one thing a browser cannot do for itself without publishing a credential.
 
 ---
 
@@ -14,7 +15,7 @@ Express API for enquiries and article content.
 | UI        | React 18, Tailwind CSS v4, Framer Motion 11, Lenis          |
 | Forms     | React Hook Form + Zod (schemas shared with the server)      |
 | Routing   | React Router 6                                              |
-| API       | Node 20+, Express 4, TypeScript, Helmet, rate limiting      |
+| Enquiries | Serverless functions (`api/`), Node 20+, nodemailer         |
 
 ### Why Tailwind instead of MUI
 
@@ -28,12 +29,14 @@ three reasons:
    CSS-in-JS to a page whose entire interactive surface is one form, one
    accordion and one drawer. The whole app currently ships **~152 kB gzip of JS
    and 11 kB of CSS**.
-3. **No capability lost.** React Hook Form, Zod, Express and TypeScript are all
-   used exactly as specified.
+3. **No capability lost.** React Hook Form, Zod, Node and TypeScript are all
+   used exactly as specified. Express was dropped later, once it became clear
+   the only server-side work left was sending three emails — see
+   **Enquiries** below.
 
 If MUI is a hard organisational requirement, the section components are the only
-files that would change — `src/data/site.ts`, `src/lib/`, and the whole server
-are presentation-agnostic.
+files that would change — `src/data/site.ts`, `src/lib/` and everything under
+`api/` are presentation-agnostic.
 
 ---
 
@@ -45,34 +48,35 @@ cp .env.example .env     # optional; sensible defaults are baked in
 npm run dev
 ```
 
-- Frontend → http://localhost:5173 (Vite proxies `/api` to the server)
-- Backend API → http://localhost:4000
+Everything runs on http://localhost:5173. The `api/` functions are mounted
+directly into the Vite dev server (see `api/_lib/dev-middleware.ts`), so forms
+work locally without the Vercel CLI and without a second process.
 
-| Script             | Does                                                   |
-| ------------------ | ------------------------------------------------------ |
-| `npm run dev`      | Builds `shared`, then runs backend + frontend concurrently    |
-| `npm run build`    | Builds all three workspaces                             |
-| `npm start`        | Serves the built frontend **and** API from Express        |
-| `npm run typecheck`| Strict typecheck across all workspaces                  |
-
-In production `npm start` serves `frontend/dist` from the Express process with an
-SPA fallback, so there is a single port to deploy.
+| Script             | Does                                                    |
+| ------------------ | ------------------------------------------------------- |
+| `npm run dev`      | Builds `shared`, then runs Vite with the API mounted     |
+| `npm run build`    | Builds `shared` and the frontend                         |
+| `npm run preview`  | Serves the production build locally                      |
+| `npm run typecheck`| Strict typecheck across `shared`, `frontend` and `api`   |
 
 ---
 
 ## Layout
 
 ```
-shared/    Zod schemas + types imported by BOTH frontend and backend
+shared/    Zod schemas + types imported by BOTH the frontend and the functions
 frontend/  Vite + React app
   src/data/site.ts        ← every word of marketing copy lives here
+  src/data/posts.ts       ← article content; swap for a CMS read
   src/components/sections ← the 11 homepage sections, one file each
   src/components/ui       ← animation + form primitives
   src/lib/motion.ts       ← shared easing, variants, viewport config
-backend/   Express API
-  src/routes/             ← posts (read), enquiries (write)
-  src/data/posts.ts       ← article content; swap for a CMS read
-  src/services/notifier.ts← single seam for email/CRM delivery
+api/       Serverless functions — the only server-side code
+  appointments.ts | contact.ts | newsletter.ts   ← one route each
+  _lib/enquiry.ts         ← validation + delivery, platform-agnostic
+  _lib/mailer.ts          ← the single seam for email/CRM delivery
+  _lib/node-adapter.ts    ← request/response glue, shared by Vercel and Vite
+  _lib/dev-middleware.ts  ← mounts the same handlers in `npm run dev`
 ```
 
 `shared/` is the contract: the same `appointmentRequestSchema` validates in the
@@ -81,9 +85,13 @@ returned by the API map straight onto React Hook Form's `setError`, so a schema
 change can never leave the two sides disagreeing.
 
 The client resolves `@drdivya/shared` from **source** via a Vite alias (instant
-HMR); the server resolves it from `shared/dist`. Editing a schema during
-`npm run dev` therefore needs `npm run build -w shared` for the server to pick
-it up — the client updates immediately.
+HMR); the functions resolve it from `shared/dist`. Editing a schema during
+`npm run dev` therefore needs `npm run build -w shared` for the functions to
+pick it up — the client updates immediately.
+
+Articles are a plain TypeScript array imported straight into the bundle. There
+is no API call to fetch them, so the journal cannot render empty because a
+server is down.
 
 ---
 
@@ -139,22 +147,55 @@ Everything below is invented stand-in content.
 
 ---
 
-## Backend notes
+## Enquiries — how the forms deliver
 
-`POST /api/appointments`, `/api/contact` and `/api/newsletter` are validated,
-rate limited (8 writes / 15 min / IP) and honeypot-protected. They currently
-**log a redacted line and return success** — nothing is emailed or stored.
+`POST /api/appointments`, `/api/contact` and `/api/newsletter` are each a
+serverless function. All three validate with the **same Zod schema the browser
+used**, check the honeypot, then hand off to `deliver()` in `api/_lib/mailer.ts`,
+which emails the practice over SMTP.
 
-To go live, implement the transport in `backend/src/services/notifier.ts` and set
-`SMTP_URL`. That file deliberately throws if `SMTP_URL` is set but no transport
-exists, so a half-finished integration fails loudly rather than silently
-dropping a patient's appointment request.
+Set these in your host's environment (never in `VITE_*`, which is public):
 
-Patient-identifiable fields (`email`, `phone`, `message`, `weeksPregnant`) are
-redacted before logging. Before handling real patient data, confirm your
-obligations under the applicable privacy regime (DPDP Act / GDPR) — at minimum
-you will need persistence with a retention policy, a real privacy notice behind
-the footer link, and a data processing agreement with your mail provider.
+| Variable       | Purpose                                              |
+| -------------- | ---------------------------------------------------- |
+| `SMTP_URL`     | Connection string, e.g. `smtps://user:pass@host:465` |
+| `NOTIFY_EMAIL` | Where enquiries are sent                             |
+| `FROM_EMAIL`   | Optional; defaults to `NOTIFY_EMAIL`                 |
+
+With neither set, local development logs a redacted line so you can work
+offline. **In production the function throws instead** — losing a patient's
+appointment request silently is worse than showing them an error, so an
+unconfigured deploy fails loudly on the first submission.
+
+### Known gaps before real patient data
+
+- **No rate limiting.** The Express version limited 8 writes / 15 min / IP from
+  in-process memory, which does not survive the move to serverless — each
+  invocation may be a fresh instance. The honeypot still filters naive bots. Use
+  your host's WAF/rate limiting, or a shared store like Upstash, before launch.
+- **Nothing is persisted.** Enquiries exist only as email. If the practice needs
+  an auditable record, add a database write alongside `deliver()`.
+- Patient-identifiable fields (`email`, `phone`, `message`, `weeksPregnant`) are
+  redacted before logging, and the subject line is not logged at all.
+- Confirm your obligations under the applicable privacy regime (DPDP Act /
+  GDPR): at minimum a retention policy, a real privacy notice behind the footer
+  link, and a data processing agreement with your mail provider.
+
+---
+
+## Deployment
+
+Static output plus functions. `vercel.json` sets the build, the SPA rewrite
+(everything except `/api/*` falls through to `index.html`) and security headers.
+
+```bash
+vercel                       # preview
+vercel --prod                # production
+```
+
+To host elsewhere, the functions are typed against plain `node:http` rather than
+any vendor's types, so porting means writing a new adapter next to
+`api/_lib/node-adapter.ts` — `handleEnquiry()` itself does not change.
 
 ---
 

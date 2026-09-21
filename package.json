@@ -5,22 +5,24 @@
   "type": "module",
   "workspaces": [
     "shared",
-    "frontend",
-    "backend"
+    "frontend"
   ],
   "engines": {
     "node": ">=20.11"
   },
   "scripts": {
-    "dev": "npm run build -w shared && concurrently -n backend,frontend -c magenta,cyan \"npm:dev:backend\" \"npm:dev:frontend\"",
-    "dev:frontend": "npm run dev -w frontend",
-    "dev:backend": "npm run dev -w backend",
-    "build": "npm run build -w shared && npm run build -w frontend && npm run build -w backend",
-    "start": "npm run start -w backend",
-    "typecheck": "npm run typecheck -w shared && npm run typecheck -w frontend && npm run typecheck -w backend"
+    "dev": "npm run build -w shared && npm run dev -w frontend",
+    "build": "npm run build -w shared && npm run build -w frontend",
+    "preview": "npm run preview -w frontend",
+    "typecheck": "npm run typecheck -w shared && npm run typecheck -w frontend && tsc -p api/tsconfig.json"
+  },
+  "dependencies": {
+    "@drdivya/shared": "*",
+    "nodemailer": "^6.9.16"
   },
   "devDependencies": {
-    "concurrently": "^9.1.2",
+    "@types/node": "^22.10.5",
+    "@types/nodemailer": "^6.4.17",
     "typescript": "^5.7.3"
   }
 }

@@ -1,8 +1,9 @@
-import type { ApiResponse, Post, PostSummary } from '@drdivya/shared';
+import type { ApiResponse } from '@drdivya/shared';
 
 /**
- * In dev, Vite proxies `/api` to the Express server, so a relative base works
- * in both environments and avoids a CORS preflight in production.
+ * The form endpoints are serverless functions deployed alongside the site, so a
+ * relative base works in both environments and avoids a CORS preflight.
+ * Locally they run inside the Vite dev server (see api/_lib/dev-middleware.ts).
  */
 const BASE = import.meta.env.VITE_API_URL ?? '';
 
@@ -52,11 +53,6 @@ const request = async <T>(path: string, init?: RequestInit): Promise<T> => {
 };
 
 export const api = {
-  listPosts: (category?: string) =>
-    request<PostSummary[]>(
-      `/api/posts${category && category !== 'all' ? `?category=${encodeURIComponent(category)}` : ''}`,
-    ),
-  getPost: (slug: string) => request<Post>(`/api/posts/${encodeURIComponent(slug)}`),
   submitAppointment: (payload: unknown) =>
     request<{ reference: string; message: string }>('/api/appointments', {
       method: 'POST',
