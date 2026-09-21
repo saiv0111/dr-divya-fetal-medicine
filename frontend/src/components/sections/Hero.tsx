@@ -5,7 +5,7 @@ import { EASE } from '@/lib/motion';
 import { scrollTo } from '@/hooks/useLenis';
 import { Button } from '@/components/ui/Button';
 import { Magnetic } from '@/components/ui/Magnetic';
-import { Orb, PulseDot } from '@/components/ui/Decor';
+import { PulseDot } from '@/components/ui/Decor';
 import { useBooking } from '@/components/booking/BookingContext';
 
 export const Hero = () => {
@@ -16,13 +16,8 @@ export const Hero = () => {
     <section
       ref={ref}
       id="hero"
-      className="grain relative min-h-screen flex flex-col justify-between pb-20 pt-20 md:pt-24"
+      className="relative min-h-screen flex flex-col justify-between pb-20 pt-20 md:pt-24"
     >
-      <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
-        <Orb className="-left-24 top-10 size-[26rem]" tone="bg-rose-200/55" speed={22} />
-        <Orb className="-right-20 bottom-0 size-[30rem]" tone="bg-sage-200/45" speed={26} delay={-6} />
-      </div>
-
       <div className="shell relative z-10 my-auto">
         <div className="grid items-center gap-8 lg:grid-cols-[1.1fr_0.9fr] lg:gap-12">
           {/* ---------------------------------------------------------- copy */}
@@ -113,7 +108,9 @@ export const Hero = () => {
                   alt="An expectant mother resting her hands on her bump"
                   width={1536}
                   height={1024}
-                  fetchPriority="high"
+                  // React 18 does not recognise the camelCase form and forwards it
+                  // to the DOM with a warning; lowercase is what the browser reads.
+                  {...{ fetchpriority: 'high' }}
                   decoding="async"
                   className="aspect-[4/3] sm:aspect-[14/11] lg:aspect-[4/3] w-full max-h-[380px] lg:max-h-[400px] object-cover object-[82%_center]"
                 />

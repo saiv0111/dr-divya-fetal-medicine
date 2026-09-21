@@ -10,7 +10,7 @@ import { enquiriesRouter } from './routes/enquiries.js';
 import { postsRouter } from './routes/posts.js';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
-const clientDist = path.resolve(here, '../../client/dist');
+const clientDist = path.resolve(here, '../../frontend/dist');
 
 export const createApp = () => {
   const app = express();

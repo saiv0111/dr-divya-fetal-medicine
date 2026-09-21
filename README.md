@@ -45,17 +45,17 @@ cp .env.example .env     # optional; sensible defaults are baked in
 npm run dev
 ```
 
-- Client → http://localhost:5173 (Vite proxies `/api` to the server)
-- API → http://localhost:4000
+- Frontend → http://localhost:5173 (Vite proxies `/api` to the server)
+- Backend API → http://localhost:4000
 
 | Script             | Does                                                   |
 | ------------------ | ------------------------------------------------------ |
-| `npm run dev`      | Builds `shared`, then runs API + client concurrently    |
+| `npm run dev`      | Builds `shared`, then runs backend + frontend concurrently    |
 | `npm run build`    | Builds all three workspaces                             |
-| `npm start`        | Serves the built client **and** API from Express        |
+| `npm start`        | Serves the built frontend **and** API from Express        |
 | `npm run typecheck`| Strict typecheck across all workspaces                  |
 
-In production `npm start` serves `client/dist` from the Express process with an
+In production `npm start` serves `frontend/dist` from the Express process with an
 SPA fallback, so there is a single port to deploy.
 
 ---
@@ -63,13 +63,13 @@ SPA fallback, so there is a single port to deploy.
 ## Layout
 
 ```
-shared/    Zod schemas + types imported by BOTH client and server
-client/    Vite + React app
+shared/    Zod schemas + types imported by BOTH frontend and backend
+frontend/  Vite + React app
   src/data/site.ts        ← every word of marketing copy lives here
   src/components/sections ← the 11 homepage sections, one file each
   src/components/ui       ← animation + form primitives
   src/lib/motion.ts       ← shared easing, variants, viewport config
-server/    Express API
+backend/   Express API
   src/routes/             ← posts (read), enquiries (write)
   src/data/posts.ts       ← article content; swap for a CMS read
   src/services/notifier.ts← single seam for email/CRM delivery
@@ -89,7 +89,7 @@ it up — the client updates immediately.
 
 ## Page structure
 
-Homepage sections, in render order (`client/src/pages/Home.tsx`):
+Homepage sections, in render order (`frontend/src/pages/Home.tsx`):
 
 1. **Hero** — parallax arch portrait, word-mask headline, magnetic CTAs
    _(followed by a thin credential ticker, which is part of the hero block)_
@@ -114,7 +114,7 @@ Homepage sections, in render order (`client/src/pages/Home.tsx`):
 
 Everything below is invented stand-in content.
 
-**`client/src/data/site.ts`**
+**`frontend/src/data/site.ts`**
 - `doctor` — full name, credentials, medical council registration number
 - `practice` — phone, email, street address, opening hours, social URLs
 - `practice.mapsEmbedUrl` — from Google Maps → Share → Embed a map
@@ -126,7 +126,7 @@ Everything below is invented stand-in content.
 - `certifications` — confirm each accreditation actually holds
 
 **Assets**
-- `client/public/pregnant-lady.png` — the supplied photo has a black studio
+- `frontend/public/pregnant-lady.png` — the supplied photo has a black studio
   backdrop, so the hero frames it in a dark ink arch and the backdrop blends in.
   Swapping in a light-background or cut-out image means changing
   `bg-ink-950` → a light tone and removing the two feather gradients in
@@ -134,7 +134,7 @@ Everything below is invented stand-in content.
 - The About section shows a **monogram placeholder** where a portrait of the
   doctor should go.
 
-**`client/index.html`** — canonical URL, Open Graph image, and the
+**`frontend/index.html`** — canonical URL, Open Graph image, and the
 `MedicalClinic` JSON-LD block all carry placeholder values.
 
 ---
@@ -145,7 +145,7 @@ Everything below is invented stand-in content.
 rate limited (8 writes / 15 min / IP) and honeypot-protected. They currently
 **log a redacted line and return success** — nothing is emailed or stored.
 
-To go live, implement the transport in `server/src/services/notifier.ts` and set
+To go live, implement the transport in `backend/src/services/notifier.ts` and set
 `SMTP_URL`. That file deliberately throws if `SMTP_URL` is set but no transport
 exists, so a half-finished integration fails loudly rather than silently
 dropping a patient's appointment request.

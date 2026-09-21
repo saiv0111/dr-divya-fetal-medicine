@@ -5,19 +5,19 @@
   "type": "module",
   "workspaces": [
     "shared",
-    "client",
-    "server"
+    "frontend",
+    "backend"
   ],
   "engines": {
     "node": ">=20.11"
   },
   "scripts": {
-    "dev": "npm run build -w shared && concurrently -n server,client -c magenta,cyan \"npm:dev:server\" \"npm:dev:client\"",
-    "dev:client": "npm run dev -w client",
-    "dev:server": "npm run dev -w server",
-    "build": "npm run build -w shared && npm run build -w client && npm run build -w server",
-    "start": "npm run start -w server",
-    "typecheck": "npm run typecheck -w shared && npm run typecheck -w client && npm run typecheck -w server"
+    "dev": "npm run build -w shared && concurrently -n backend,frontend -c magenta,cyan \"npm:dev:backend\" \"npm:dev:frontend\"",
+    "dev:frontend": "npm run dev -w frontend",
+    "dev:backend": "npm run dev -w backend",
+    "build": "npm run build -w shared && npm run build -w frontend && npm run build -w backend",
+    "start": "npm run start -w backend",
+    "typecheck": "npm run typecheck -w shared && npm run typecheck -w frontend && npm run typecheck -w backend"
   },
   "devDependencies": {
     "concurrently": "^9.1.2",

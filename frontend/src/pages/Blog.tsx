@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { forwardRef, useCallback, useEffect, useMemo, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import type { Post, PostSummary } from '@drdivya/shared';
@@ -8,7 +8,6 @@ import { cn, formatDate } from '@/lib/utils';
 import { lockScroll } from '@/hooks/useLenis';
 import { Eyebrow } from '@/components/ui/SectionHeading';
 import { SplitWords } from '@/components/ui/SplitWords';
-import { Orb } from '@/components/ui/Decor';
 import { Marquee } from '@/components/ui/Marquee';
 import { Button } from '@/components/ui/Button';
 import { useBooking } from '@/components/booking/BookingContext';
@@ -48,16 +47,14 @@ const Cover = ({ tone, label, tall = false }: { tone: string; label: string; tal
   </div>
 );
 
-const PostCard = ({
-  post,
-  index,
-  onOpen,
-}: {
-  post: PostSummary;
-  index: number;
-  onOpen: (slug: string) => void;
-}) => (
+/* `AnimatePresence mode="popLayout"` measures each child through a ref, so this
+   has to forward one or the exit animation cannot be positioned. */
+const PostCard = forwardRef<
+  HTMLDivElement,
+  { post: PostSummary; index: number; onOpen: (slug: string) => void }
+>(({ post, index, onOpen }, ref) => (
   <motion.article
+    ref={ref}
     layout
     initial={{ opacity: 0, y: 28 }}
     animate={{ opacity: 1, y: 0 }}
@@ -88,7 +85,8 @@ const PostCard = ({
       <p className="label mt-5 text-ink-400">{formatDate(post.publishedAt)}</p>
     </button>
   </motion.article>
-);
+));
+PostCard.displayName = 'PostCard';
 
 /* -------------------------------------------------------------------------- */
 /*  Reader overlay                                                             */
@@ -310,8 +308,7 @@ export const Blog = () => {
   return (
     <>
       {/* ------------------------------------------------------------ hero */}
-      <section className="grain relative overflow-hidden pb-16 pt-32 md:pb-20 md:pt-40">
-        <Orb className="-right-24 top-10 size-[26rem]" tone="bg-rose-200/50" speed={24} />
+      <section className="relative overflow-hidden pb-16 pt-32 md:pb-20 md:pt-40">
         <div className="shell relative z-10">
           <Eyebrow>Journal</Eyebrow>
           <SplitWords

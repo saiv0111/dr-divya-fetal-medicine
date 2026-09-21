@@ -6,7 +6,6 @@ import { EASE } from '@/lib/motion';
 import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
 import { ScrollProgress } from '@/components/ui/Decor';
-import { VariantSwitcher } from '@/components/ui/VariantSwitcher';
 import { BookingProvider } from '@/components/booking/BookingContext';
 import { BookingDrawer } from '@/components/booking/BookingDrawer';
 import { Home } from '@/pages/Home';
@@ -99,7 +98,6 @@ export const App = () => {
 
       <Footer />
       <BookingDrawer />
-      <VariantSwitcher />
     </BookingProvider>
   );
 };

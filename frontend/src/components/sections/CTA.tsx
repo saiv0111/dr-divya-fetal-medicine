@@ -18,7 +18,7 @@ export const CTA = () => {
   return (
     <section id="cta" ref={ref} className="py-10">
       <div className="shell">
-        <div className="grain relative isolate overflow-hidden rounded-[2rem] bg-ink-900 px-6 py-20 text-center md:px-16 md:py-28">
+        <div className="relative isolate overflow-hidden rounded-[2rem] bg-ink-900 px-6 py-20 text-center md:px-16 md:py-28">
 
 
           {/* Concentric rings echo the ultrasound cone. */}

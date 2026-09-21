@@ -6,7 +6,6 @@ import { Eyebrow } from '@/components/ui/SectionHeading';
 import { SplitWords } from '@/components/ui/SplitWords';
 import { ScrollHighlightText } from '@/components/ui/ScrollHighlightText';
 import { Reveal } from '@/components/ui/Reveal';
-import { Orb } from '@/components/ui/Decor';
 
 export const About = () => {
   const ref = useRef<HTMLElement>(null);
@@ -20,12 +19,6 @@ export const About = () => {
       id="about"
       className="relative scroll-mt-24 py-20"
     >
-      {/* Clip only the decorative orb — clipping the whole section also cut
-          the identity card's shadow. */}
-      <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
-        <Orb className="-right-40 top-1/3 size-[30rem]" tone="bg-rose-100/70" speed={30} />
-      </div>
-
       <div className="shell relative z-10">
         <div className="grid gap-14 lg:grid-cols-[0.9fr_1.1fr] lg:gap-20">
           {/* ------------------------------------------------ sticky identity */}
