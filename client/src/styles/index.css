@@ -1,0 +1,376 @@
+@import 'tailwindcss';
+
+/* -------------------------------------------------------------------------- */
+/*  Design tokens                                                              */
+/* -------------------------------------------------------------------------- */
+
+@theme {
+  /* Ink — deep clinical navy, used for text and dark panels */
+  --color-ink-950: #060f19;
+  --color-ink-900: #0b1b2b;
+  --color-ink-800: #12293d;
+  --color-ink-700: #1b3a54;
+  --color-ink-600: #2e4a6b;
+  --color-ink-500: #3f5f80;
+  --color-ink-400: #63809c;
+  --color-ink-300: #93a8bc;
+
+  /* Slate — secondary copy */
+  --color-slate-body: #5d6c7b;
+  --color-slate-muted: #8493a2;
+
+  /* Cream — warm page surfaces */
+  --color-cream-50: #fdfbf9;
+  --color-cream-100: #f7f4f0;
+  --color-cream-200: #f0eae3;
+  --color-cream-300: #e4dbd1;
+
+  /* Rose — the human, feminine accent */
+  --color-rose-50: #fdf5f3;
+  --color-rose-100: #f8e6e2;
+  --color-rose-200: #efc9c2;
+  --color-rose-300: #e0a79e;
+  --color-rose-400: #cd8479;
+  --color-rose-500: #b8655a;
+  --color-rose-600: #9c4f45;
+
+  /* Sage — tertiary, used sparingly for journey markers */
+  --color-sage-200: #cfdbd4;
+  --color-sage-400: #7d9c8e;
+  --color-sage-600: #4e6e63;
+
+  --font-display: 'Baskervville', Georgia, serif;
+  --font-sans: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, 'SF Mono', monospace;
+
+  /* Theme-aware surfaces. Tailwind compiles `bg-page`/`bg-card`/`bg-shell`
+     to var() references, so a variant only has to redefine these. */
+  --color-page: #f7f4f0;
+  --color-card: #ffffff;
+  --color-shell: #0b1b2b;
+  --radius-btn: 999px;
+
+  --radius-card: 16px;
+  --radius-pill: 999px;
+
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out-soft: cubic-bezier(0.65, 0, 0.35, 1);
+
+  --shadow-lift: 0 24px 60px -32px rgb(11 27 43 / 0.28);
+  --shadow-float: 0 40px 90px -40px rgb(11 27 43 / 0.38);
+}
+
+/* -------------------------------------------------------------------------- */
+/*  Variants                                                                   */
+/* -------------------------------------------------------------------------- */
+
+/* `cool` keeps every layout and type decision identical and changes only the
+   surfaces and the button radius. Set via data-variant on <html>. */
+:root[data-variant='cool'] {
+  --color-page: #ffffff;
+  --color-card: #ebedf0;
+  --color-shell: #0e1116;
+  --radius-btn: 5px;
+
+  /* The cream ramp is used directly in a few places; align it to the variant
+     so nothing warm leaks through onto a white page. */
+  --color-cream-50: #ffffff;
+  --color-cream-100: #ffffff;
+  --color-cream-200: #ebedf0;
+  --color-cream-300: #dcdfe4;
+}
+
+/* The warm gradient orbs tint the page; on a pure-white variant they read as
+   a stain rather than atmosphere, so they are suppressed. */
+:root[data-variant='cool'] .orb {
+  display: none;
+}
+
+/* Grain multiplies over the page and greys a white background. */
+:root[data-variant='cool'] .grain::after {
+  display: none;
+}
+
+/* -------------------------------------------------------------------------- */
+/*  Base                                                                       */
+/* -------------------------------------------------------------------------- */
+
+@layer base {
+  *,
+  *::before,
+  *::after {
+    border-color: color-mix(in oklab, var(--color-ink-900) 10%, transparent);
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+    scroll-behavior: smooth;
+  }
+
+  /* Lenis drives scrolling; native smooth-scroll would fight it. */
+  html.lenis,
+  html.lenis body {
+    height: auto;
+  }
+  html.lenis {
+    scroll-behavior: auto;
+  }
+  .lenis.lenis-smooth {
+    scroll-behavior: auto !important;
+  }
+  .lenis.lenis-stopped {
+    overflow: hidden;
+  }
+
+  body {
+    background-color: var(--color-page);
+    color: var(--color-ink-900);
+    font-family: var(--font-sans);
+    font-feature-settings: 'cv11', 'ss01';
+    font-synthesis-weight: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: clip;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-display);
+    font-weight: 400;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  ::selection {
+    background: var(--color-rose-200);
+    color: var(--color-ink-900);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-rose-500);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+
+  /* Firefox + Safari scrollbar treatment */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-ink-300) transparent;
+  }
+}
+
+/* -------------------------------------------------------------------------- */
+/*  Utilities                                                                  */
+/* -------------------------------------------------------------------------- */
+
+@utility shell {
+  width: 100%;
+  margin-inline: auto;
+  max-width: 82rem;
+  padding-inline: 1.25rem;
+  @media (min-width: 768px) {
+    padding-inline: 2.5rem;
+  }
+  @media (min-width: 1280px) {
+    padding-inline: 3.5rem;
+  }
+}
+
+/* Uppercase mono eyebrow, used across every section header. */
+@utility label {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+/* Fluid display sizes — serif font scales elegantly. */
+@utility display-xl {
+  font-family: var(--font-display);
+  font-size: clamp(2.8rem, 6.8vw, 6.2rem);
+  line-height: 1.02;
+  letter-spacing: -0.015em;
+  font-weight: 400;
+}
+@utility display-lg {
+  font-family: var(--font-display);
+  font-size: clamp(2.2rem, 4.5vw, 4rem);
+  line-height: 1.05;
+  letter-spacing: -0.015em;
+  font-weight: 400;
+}
+@utility display-md {
+  font-family: var(--font-display);
+  font-size: clamp(1.8rem, 2.8vw, 2.5rem);
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+  font-weight: 400;
+}
+
+/* Numerals always render in Inter. The display serif uses old-style figures,
+   which sit at inconsistent heights and read as a mistake in stats and dates. */
+@utility num {
+  font-family: var(--font-sans);
+  font-weight: 400;
+  font-variant-numeric: tabular-nums lining-nums;
+  letter-spacing: -0.02em;
+}
+
+@utility glass {
+  background: color-mix(in oklab, white 72%, transparent);
+  backdrop-filter: blur(16px) saturate(140%);
+  -webkit-backdrop-filter: blur(16px) saturate(140%);
+}
+
+/* Hides a honeypot input from humans without hiding it from bots. */
+@utility honeypot {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+@utility no-scrollbar {
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* -------------------------------------------------------------------------- */
+/*  Components                                                                 */
+/* -------------------------------------------------------------------------- */
+
+@layer components {
+  /* `font-display` only sets the family; Inter needs weight and negative
+     tracking to read as display type. Any utility class still wins. */
+  .font-display {
+    font-family: var(--font-display);
+  }
+
+  /* Soft film grain that keeps large flat areas from banding. */
+  .grain::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.35;
+    mix-blend-mode: multiply;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='0.22'/%3E%3C/svg%3E");
+  }
+
+  /* Arch silhouette used for the hero portrait and journey cards. */
+  .arch {
+    border-radius: 999px 999px 24px 24px;
+  }
+
+  .marquee-track {
+    display: flex;
+    width: max-content;
+    animation: marquee var(--marquee-duration, 40s) linear infinite;
+  }
+  .marquee-track[data-direction='right'] {
+    animation-direction: reverse;
+  }
+  .marquee:hover .marquee-track {
+    animation-play-state: paused;
+  }
+
+  /* Underline that wipes in from the left on hover. */
+  .link-wipe {
+    background-image: linear-gradient(currentColor, currentColor);
+    background-size: 0% 1px;
+    background-position: 0 100%;
+    background-repeat: no-repeat;
+    transition: background-size 0.4s var(--ease-out-expo);
+  }
+  .link-wipe:hover,
+  .link-wipe:focus-visible {
+    background-size: 100% 1px;
+  }
+}
+
+@keyframes marquee {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+@keyframes pulse-ring {
+  0% {
+    transform: scale(0.85);
+    opacity: 0.7;
+  }
+  70% {
+    transform: scale(1.9);
+    opacity: 0;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+/* ---------- Fetal journey scan stage ---------- */
+
+/* Every drawn-on stroke is normalised by pathLength="1", so a single
+   dasharray of 1 lets stroke-dashoffset act as a 0–1 progress value. */
+.fetus-draw {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+}
+
+.fetus-shape {
+  animation: fetus-breathe 4.5s ease-in-out infinite;
+}
+
+@keyframes fetus-breathe {
+  0%,
+  100% {
+    filter: brightness(1);
+  }
+  50% {
+    filter: brightness(1.07);
+  }
+}
+
+@keyframes drift {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(2%, -3%, 0) scale(1.06);
+  }
+}
+
+/* -------------------------------------------------------------------------- */
+/*  Reduced motion                                                             */
+/* -------------------------------------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .marquee-track {
+    animation: none;
+    transform: none;
+  }
+}
