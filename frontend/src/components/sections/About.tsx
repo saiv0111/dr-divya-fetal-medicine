@@ -17,7 +17,7 @@ export const About = () => {
     <section
       ref={ref}
       id="about"
-      className="relative scroll-mt-24 py-20"
+      className="relative scroll-mt-24 py-11"
     >
       <div className="shell relative z-10">
         <div className="grid gap-14 lg:grid-cols-[0.9fr_1.1fr] lg:gap-20">
@@ -27,22 +27,19 @@ export const About = () => {
 
             <motion.div className="mt-8" style={reduced ? undefined : { y: cardY }}>
               <Reveal scale direction="none" className="relative">
-                <div className="relative overflow-hidden rounded-3xl border border-ink-900/10 bg-ink-950 shadow-float">
+                {/* Light panel with the caption floating over the foot of the
+                    photo, rather than the photo bleeding into a dark slab. */}
+                <div className="relative overflow-hidden rounded-3xl border border-ink-900/8 bg-card">
                   <img
                     src="/doc-image.png"
                     alt={doctor.name}
-                    className="aspect-[4/3] w-full object-cover object-top"
+                    className="aspect-[5/6] w-full object-cover object-top"
                   />
-                  <div
-                    aria-hidden
-                    className="pointer-events-none absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-ink-950 via-ink-950/60 to-transparent"
-                  />
-                  <div className="relative p-6 pt-2 text-cream-100">
-                    <p className="font-display text-3xl text-cream-50">{doctor.name}</p>
-                    <p className="label mt-1 text-cream-100/60">{doctor.role}</p>
-                    <p className="mt-3 border-t border-cream-100/15 pt-3 text-[0.7rem] leading-relaxed text-cream-100/60">
-                      {doctor.credentials}
+                  <div className="absolute inset-x-3 bottom-3 rounded-2xl border border-ink-900/8 bg-page/92 px-4 py-3 backdrop-blur">
+                    <p className="font-display text-[1.05rem] font-medium text-ink-900">
+                      {doctor.name}
                     </p>
+                    <p className="mt-0.5 text-[0.75rem] text-slate-muted">{doctor.credentials}</p>
                   </div>
                 </div>
               </Reveal>
@@ -68,22 +65,21 @@ export const About = () => {
               </p>
             </Reveal>
 
-            {/* Facts sit in the narrative column: the identity card column is
-                sticky and already full, and this fills the gap under the quote. */}
-            <dl className="mt-12 grid max-w-xl grid-cols-3 divide-x divide-ink-900/10 rounded-2xl border border-ink-900/10 bg-card py-5">
+            {/* Numbers carry themselves at this size; the bordered pill they
+                used to sit in was doing nothing but adding a box. */}
+            <dl className="mt-12 grid max-w-2xl grid-cols-2 gap-x-8 gap-y-8 border-t border-ink-900/10 pt-9 sm:grid-cols-3">
               {about.facts.map((fact, i) => (
                 <motion.div
                   key={fact.label}
-                  className="px-3 text-center"
                   initial={{ opacity: 0, y: 14 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={viewportOnce}
                   transition={{ duration: 0.7, ease: EASE, delay: 0.1 + i * 0.1 }}
                 >
-                  <dt className="label text-[0.5625rem] text-ink-500">{fact.label}</dt>
-                  <dd className="num mt-1.5 text-2xl leading-none text-ink-900">
+                  <dd className="num text-[2.1rem] font-medium leading-none text-ink-900 sm:text-[2.4rem]">
                     {fact.value}
                   </dd>
+                  <dt className="mt-2 text-[0.8rem] text-slate-body">{fact.label}</dt>
                 </motion.div>
               ))}
             </dl>

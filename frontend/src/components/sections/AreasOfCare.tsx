@@ -71,32 +71,31 @@ const careData = {
 
 export const AreasOfCare = () => {
   const [activeTab, setActiveTab] = useState<CareTab>('pregnancy');
-  const [hoveredIndex, setHoveredIndex] = useState<number>(0);
   const { open } = useBooking();
 
   const current = careData[activeTab];
 
   return (
-    <section id="services" className="scroll-mt-24 pt-20 pb-10">
+    <section id="services" className="scroll-mt-24 py-11">
       <div className="shell">
         {/* Section Header */}
-        <div className="text-center max-w-2xl mx-auto">
+        <div className="mx-auto max-w-3xl text-center">
           <Eyebrow className="justify-center">AREAS OF CARE</Eyebrow>
           <motion.h2
-            className="mt-4 font-display text-4xl sm:text-5xl lg:text-6xl text-ink-900 leading-tight tracking-tight font-normal"
+            className="mt-4 font-display text-[2rem] font-normal leading-tight tracking-tight text-ink-900 sm:text-[2.6rem] lg:text-[3.1rem]"
             initial={{ opacity: 0, y: 16 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={viewportOnce}
             transition={{ duration: 0.7, ease: EASE }}
           >
-            Two specialties. <br className="hidden sm:inline" />
-            <span className="font-display text-ink-900 font-normal">One thoughtful approach.</span>
+            Two specialties.{' '}
+            <span className="font-display font-normal text-ink-900">One thoughtful approach.</span>
           </motion.h2>
         </div>
 
         {/* Card Container */}
         <motion.div
-          className="mt-10 sm:mt-12 rounded-2xl sm:rounded-3xl border border-ink-900/10 bg-card p-6 sm:p-10 lg:p-14 shadow-float"
+          className="mt-10 sm:mt-9 rounded-2xl sm:rounded-3xl border border-ink-900/8 bg-cream-50 p-6 sm:p-10 lg:p-14 shadow-lift"
           initial={{ opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={viewportOnce}
@@ -109,7 +108,6 @@ export const AreasOfCare = () => {
                 type="button"
                 onClick={() => {
                   setActiveTab('pregnancy');
-                  setHoveredIndex(0);
                 }}
                 className={`relative rounded-full px-5 sm:px-7 py-2.5 text-xs sm:text-sm font-medium transition-colors duration-300 ${
                   activeTab === 'pregnancy'
@@ -131,7 +129,6 @@ export const AreasOfCare = () => {
                 type="button"
                 onClick={() => {
                   setActiveTab('gynaecology');
-                  setHoveredIndex(0);
                 }}
                 className={`relative rounded-full px-5 sm:px-7 py-2.5 text-xs sm:text-sm font-medium transition-colors duration-300 ${
                   activeTab === 'gynaecology'
@@ -152,7 +149,7 @@ export const AreasOfCare = () => {
           </div>
 
           {/* Tab Content (Grid Layout) */}
-          <div className="mt-10 sm:mt-14">
+          <div className="mt-10 sm:mt-10">
             <div className="grid gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:gap-14 items-start">
               {/* Left Side: both clips stay mounted and crossfade.
                   Unmounting them on tab change threw away the decoded video and
@@ -205,56 +202,21 @@ export const AreasOfCare = () => {
                       {current.subtitle}
                     </p>
 
-                    {/* Interactive Feature Items List with Constant Card Height */}
-                    <div className="mt-6 border-t border-ink-900/10 pt-3 space-y-1">
-                      {current.items.map((item, idx) => {
-                        const isHovered = hoveredIndex === idx;
-
-                        return (
-                          <div
-                            key={item.title}
-                            onMouseEnter={() => setHoveredIndex(idx)}
-                            onClick={() => setHoveredIndex(idx)}
-                            className={`group cursor-pointer rounded-xl p-3 sm:p-3.5 transition-all duration-300 border ${
-                              isHovered
-                                ? 'bg-cream-100/90 border-ink-900/10 shadow-sm'
-                                : 'bg-transparent border-transparent hover:bg-cream-100/40'
-                            }`}
-                          >
-                            <div className="flex items-center gap-3">
-                              <span
-                                className={`text-xs transition-transform duration-300 ${
-                                  isHovered ? 'text-rose-500 scale-125 rotate-45' : 'text-rose-400'
-                                }`}
-                                aria-hidden
-                              >
-                                ✦
-                              </span>
-                              <span
-                                className={`text-sm sm:text-base transition-colors duration-200 ${
-                                  isHovered ? 'font-semibold text-ink-900' : 'font-medium text-ink-800'
-                                }`}
-                              >
-                                {item.title}
-                              </span>
-                            </div>
-
-                            {/* Synchronous Height Toggle with Smooth Opacity Fade for 100% Constant Card Size */}
-                            <div
-                              className={`overflow-hidden pl-6 pr-2 transition-opacity duration-200 flex items-center ${
-                                isHovered
-                                  ? 'h-[2.6rem] mt-1.5 opacity-100'
-                                  : 'h-0 mt-0 opacity-0 pointer-events-none'
-                              }`}
-                            >
-                              <p className="text-xs sm:text-sm leading-snug text-slate-body font-normal line-clamp-2">
-                                {item.description}
-                              </p>
-                            </div>
-                          </div>
-                        );
-                      })}
-                    </div>
+                    {/* Just the points. The hover-reveal description under each
+                        one added a second reading order to scan and forced a
+                        fixed card height to stop the panel jumping. */}
+                    <ul className="mt-6 space-y-1 border-t border-ink-900/10 pt-4">
+                      {current.items.map((item) => (
+                        <li key={item.title} className="flex items-center gap-3 py-2">
+                          <span aria-hidden className="text-xs text-rose-500">
+                            ✦
+                          </span>
+                          <span className="text-sm font-medium text-ink-800 sm:text-base">
+                            {item.title}
+                          </span>
+                        </li>
+                      ))}
+                    </ul>
                   </div>
 
                   {/* CTA Button */}

@@ -66,7 +66,7 @@ const MapFrame = () => (
 );
 
 export const Location = () => (
-  <section id="location" className="scroll-mt-24 py-10 overflow-x-clip">
+  <section id="location" className="scroll-mt-24 overflow-x-clip py-11">
     <div className="shell">
       <SectionHeading
         eyebrow="Find Us"
@@ -74,7 +74,7 @@ export const Location = () => (
         intro="Ground-level access, a quiet waiting area kept deliberately small, and parking in the same building."
       />
 
-      <div className="mt-14 grid gap-6 lg:grid-cols-[0.88fr_1.12fr] lg:gap-8">
+      <div className="mt-10 grid gap-6 lg:grid-cols-[0.88fr_1.12fr] lg:gap-8">
         {/* ------------------------------------------------- address + hours */}
         <div className="flex flex-col gap-6">
           <Reveal delay={0.1}>

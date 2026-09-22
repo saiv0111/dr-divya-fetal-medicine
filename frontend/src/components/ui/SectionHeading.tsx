@@ -10,22 +10,24 @@ interface EyebrowProps {
   className?: string;
 }
 
-/** Mono label with a rule that draws itself in from the left. */
+/** Dot-and-pill section label, used for every section eyebrow on the page. */
 export const Eyebrow = ({ children, tone = 'dark', className }: EyebrowProps) => (
-  <motion.div
-    className={cn('flex items-center gap-3 whitespace-nowrap shrink-0', className)}
-    initial="hidden"
-    whileInView="visible"
+  <motion.span
+    className={cn(
+      'inline-flex w-fit items-center gap-2 whitespace-nowrap rounded-full border px-3 py-1 text-[0.7rem] font-medium tracking-tight',
+      tone === 'dark'
+        ? 'border-ink-900/10 bg-card text-ink-700'
+        : 'border-cream-100/15 bg-cream-100/5 text-cream-100/80',
+      className,
+    )}
+    initial={{ opacity: 0, y: 6 }}
+    whileInView={{ opacity: 1, y: 0 }}
     viewport={viewportOnce}
+    transition={{ duration: 0.5, ease: EASE }}
   >
-    <motion.span
-      className={cn('label whitespace-nowrap', tone === 'dark' ? 'text-ink-600' : 'text-cream-100/70')}
-      variants={{ hidden: { opacity: 0, x: -8 }, visible: { opacity: 1, x: 0 } }}
-      transition={{ duration: 0.6, ease: EASE, delay: 0.1 }}
-    >
-      {children}
-    </motion.span>
-  </motion.div>
+    <span aria-hidden className="size-1.5 rounded-full bg-rose-500" />
+    {children}
+  </motion.span>
 );
 
 interface SectionHeadingProps {

@@ -5,7 +5,7 @@ import { EASE } from '@/lib/motion';
 import { scrollTo } from '@/hooks/useLenis';
 import { Button } from '@/components/ui/Button';
 import { Magnetic } from '@/components/ui/Magnetic';
-import { PulseDot } from '@/components/ui/Decor';
+import { Eyebrow } from '@/components/ui/SectionHeading';
 import { useBooking } from '@/components/booking/BookingContext';
 
 export const Hero = () => {
@@ -16,7 +16,7 @@ export const Hero = () => {
     <section
       ref={ref}
       id="hero"
-      className="relative min-h-screen flex flex-col justify-between overflow-hidden pb-20 pt-28 md:pt-32"
+      className="relative min-h-screen flex flex-col justify-between overflow-hidden pb-11 pt-28 md:pt-32"
     >
       {/* Full-bleed photograph. It runs to the top, right and bottom edges of
           the viewport — the navbar is transparent until you scroll, so the
@@ -51,7 +51,7 @@ export const Hero = () => {
       </div>
 
       <div className="shell relative z-10 my-auto">
-        <div className="grid items-center gap-8 lg:grid-cols-[1.12fr_0.88fr] lg:gap-10 xl:grid-cols-[1.02fr_0.98fr]">
+        <div className="grid items-center gap-8 lg:grid-cols-[1.12fr_0.88fr] lg:gap-10 xl:grid-cols-[1.02fr_0.98fr] [&>*]:min-w-0">
           {/* ---------------------------------------------------------- copy */}
           <div>
             <motion.div
@@ -60,13 +60,12 @@ export const Hero = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, ease: EASE }}
             >
-              <PulseDot />
-              <span className="label text-ink-600">{hero.eyebrow}</span>
+              <Eyebrow>{hero.eyebrow}</Eyebrow>
             </motion.div>
 
             {/* Exactly 2 lines for heading */}
             <motion.h1
-              className="mt-4 text-[2.5rem] sm:text-[4.1rem] xl:text-[4.6rem] 2xl:text-[4.8rem] font-display font-normal leading-[1.14] text-ink-900 tracking-tight"
+              className="mt-4 text-[2.3rem] sm:text-[4.1rem] lg:text-[3.6rem] xl:text-[4.15rem] 2xl:text-[4.3rem] font-display font-normal leading-[1.16] text-ink-900 tracking-tight"
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, ease: EASE, delay: 0.15 }}
@@ -100,30 +99,30 @@ export const Hero = () => {
               </Magnetic>
             </motion.div>
 
+            {/* The urgent line used to sit alone at the foot of the section,
+                where it was easy to miss. It matters more than a star rating,
+                so it takes that slot instead. */}
             <motion.div
-              className="mt-7 flex items-center gap-4"
+              className="mt-7"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 1, ease: EASE, delay: 0.7 }}
             >
-              <div className="flex gap-1" aria-hidden>
-                {Array.from({ length: 5 }).map((_, i) => (
-                  <motion.svg
-                    key={i}
-                    viewBox="0 0 20 19"
-                    className="size-4 fill-rose-400"
-                    initial={{ scale: 0, rotate: -35 }}
-                    animate={{ scale: 1, rotate: 0 }}
-                    transition={{ duration: 0.55, ease: EASE, delay: 0.75 + i * 0.08 }}
-                  >
-                    <path d="M10 0l2.6 6.3 6.8.5-5.2 4.4 1.6 6.6L10 14.3 4.2 17.8l1.6-6.6L.6 6.8l6.8-.5L10 0Z" />
-                  </motion.svg>
-                ))}
-              </div>
-              <p className="text-[0.8125rem] leading-snug text-slate-body">
-                <span className="font-medium text-ink-900">{hero.trust.stat}</span>{' '}
-                {hero.trust.text}
+              <p className="text-[0.8125rem] text-slate-body">
+                Urgent concern about your pregnancy?
               </p>
+              <a
+                href={practice.phoneHref}
+                className="mt-2 inline-flex items-center gap-2 text-[0.9rem] font-medium text-ink-900 transition-colors duration-300 hover:text-rose-600"
+              >
+                <svg viewBox="0 0 16 16" aria-hidden className="size-4 text-rose-500">
+                  <path
+                    d="M5.2 2.6 6.6 5 5.3 6.4a8.4 8.4 0 0 0 4.3 4.3L11 9.4l2.4 1.4-.5 2.1a1 1 0 0 1-1.1.7A11.4 11.4 0 0 1 2.4 4.2a1 1 0 0 1 .7-1.1l2.1-.5Z"
+                    fill="currentColor"
+                  />
+                </svg>
+                <span className="num">Call {practice.phone}</span>
+              </a>
             </motion.div>
           </div>
 
@@ -146,16 +145,6 @@ export const Hero = () => {
         />
       </div>
 
-      {/* Emergency line */}
-      {/* The centred content above uses auto margins, which left this with no
-          gap at all on short viewports. A fixed top margin guarantees one. */}
-      <p className="shell relative z-10 mt-16 text-center text-[0.7rem] text-slate-muted md:mt-20">
-        Urgent concern about your pregnancy? Call{' '}
-        <a href={practice.phoneHref} className="link-wipe text-ink-700">
-          {practice.phone}
-        </a>{' '}
-        or contact your maternity unit.
-      </p>
     </section>
   );
 };

@@ -40,14 +40,14 @@
   --color-sage-400: #7d9c8e;
   --color-sage-600: #4e6e63;
 
-  --font-display: 'Baskervville', Georgia, serif;
+  --font-display: 'Lexend', 'Inter', system-ui, sans-serif;
   --font-sans: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
   --font-mono: 'IBM Plex Mono', ui-monospace, 'SF Mono', monospace;
 
   /* Surfaces. Tailwind compiles `bg-page`/`bg-card`/`bg-shell` to var()
      references, so every surface in the site resolves through these four. */
   --color-page: #ffffff;
-  --color-card: #ebedf0;
+  --color-card: #ffffff;
   --color-shell: #0e1116;
   --radius-btn: 5px;
 
@@ -196,7 +196,7 @@
 /* Numerals always render in Inter. The display serif uses old-style figures,
    which sit at inconsistent heights and read as a mistake in stats and dates. */
 @utility num {
-  font-family: var(--font-sans);
+  font-family: var(--font-display);
   font-weight: 400;
   font-variant-numeric: tabular-nums lining-nums;
   letter-spacing: -0.02em;

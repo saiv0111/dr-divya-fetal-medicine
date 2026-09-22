@@ -1,12 +1,12 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import {
-  AnimatePresence,
+  
   motion,
-  useMotionValue,
+  
   useMotionValueEvent,
   useReducedMotion,
   useScroll,
-  useSpring,
+  
 } from 'framer-motion';
 import { journey } from '@/data/site';
 import { EASE, viewportOnce } from '@/lib/motion';
@@ -19,41 +19,6 @@ import { useBooking } from '@/components/booking/BookingContext';
 import { EMBRYO_FRAMES } from './embryoStages';
 
 /** Follows the cursor across the journey card with a soft spring lag */
-const CursorChip = ({ visible, x, y }: { visible: boolean; x: number; y: number }) => {
-  const springX = useSpring(useMotionValue(0), {
-    stiffness: 280,
-    damping: 26,
-    mass: 0.6,
-  });
-  const springY = useSpring(useMotionValue(0), {
-    stiffness: 280,
-    damping: 26,
-    mass: 0.6,
-  });
-  springX.set(x);
-  springY.set(y);
-
-  return (
-    <AnimatePresence>
-      {visible && (
-        <motion.div
-          className="pointer-events-none fixed z-30 hidden -translate-x-1/2 -translate-y-1/2 lg:block"
-          style={{ left: springX, top: springY }}
-          initial={{ opacity: 0, scale: 0.5 }}
-          animate={{ opacity: 1, scale: 1 }}
-          exit={{ opacity: 0, scale: 0.5 }}
-          transition={{ duration: 0.28, ease: EASE }}
-        >
-          <span className="label grid size-[5.5rem] place-items-center rounded-full bg-ink-900 text-center text-[0.5625rem] leading-tight text-cream-100 shadow-lift">
-            Book
-            <br />
-            this scan
-          </span>
-        </motion.div>
-      )}
-    </AnimatePresence>
-  );
-};
 
 /* -------------------------------------------------------------------------- */
 /*  Embryo stage renderer                                                      */
@@ -142,8 +107,6 @@ export const BabyJourney = () => {
 
   const [active, setActive] = useState(0);
   const [hintHidden, setHintHidden] = useState(false);
-  const [isCardHovered, setIsCardHovered] = useState(false);
-  const [cursor, setCursor] = useState({ x: 0, y: 0 });
 
   const tweenRef = useRef<number | undefined>(undefined);
   const positionRef = useRef(0);
@@ -207,15 +170,11 @@ export const BabyJourney = () => {
   return (
     <section
       id="journey"
-      className="relative scroll-mt-24 pb-10"
-      onPointerMove={(event) => {
-        if (event.pointerType === 'mouse') setCursor({ x: event.clientX, y: event.clientY });
-      }}
+      className="relative scroll-mt-24 pb-11"
     >
-      <CursorChip visible={!reduced && isCardHovered} x={cursor.x} y={cursor.y} />
 
       {/* Heading */}
-      <div className="shell pt-10">
+      <div className="shell pt-11">
         <SectionHeading
           eyebrow={journey.eyebrow}
           heading={journey.heading}
@@ -232,13 +191,13 @@ export const BabyJourney = () => {
           className={cn(
             'flex',
             pinned
-              ? 'sticky top-0 h-screen items-start overflow-hidden pt-10'
+              ? 'sticky top-0 h-[78vh] items-center overflow-hidden'
               : 'items-center py-14',
           )}
         >
           <div className="shell w-full">
-            <div className="grid items-center gap-12 lg:grid-cols-[0.9fr_1.1fr] lg:gap-[60px]">
-              {/* Scan Stage + Week Pills */}
+            <div className="grid gap-12 lg:grid-cols-[0.92fr_1.08fr] lg:items-center lg:gap-16">
+              {/* ------------------------------------------------- artwork */}
               <motion.div
                 initial={{ opacity: 0, scale: 0.94 }}
                 whileInView={{ opacity: 1, scale: 1 }}
@@ -259,22 +218,69 @@ export const BabyJourney = () => {
                     </span>
                   )}
                 </div>
+              </motion.div>
 
-                {/* Week selector.
-                    When the section is pinned, page scroll drives it and the
-                    rail is mainly an indicator, so it can stay understated.
-                    When it is not pinned — touch widths and reduced motion —
-                    tapping is the ONLY way to move, so each node becomes a full
-                    44px button with the number inside, plus prev/next arrows. */}
+              {/* ------------------------------------------------- content
+                  No card. The old panel wrapped this in a bordered, shadowed
+                  box that was also a giant click target with a custom hover
+                  cursor — a lot of interface around some text. */}
+              <motion.div
+                initial={{ opacity: 0, y: 24 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={viewportOnce}
+                transition={{ duration: 0.8, ease: EASE, delay: 0.1 }}
+              >
+                <div aria-live="polite">
+                  <motion.h3
+                    key={`${current.week}-label`}
+                    className="num text-[2.6rem] font-medium leading-[1.05] text-ink-900 sm:text-[3.2rem]"
+                    initial={{ opacity: 0, y: 12 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.45, ease: EASE }}
+                  >
+                    {current.week}
+                  </motion.h3>
+                  <motion.p
+                    key={`${current.week}-size`}
+                    className="mt-1.5 text-[0.8rem] text-rose-600"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ duration: 0.45, ease: EASE, delay: 0.05 }}
+                  >
+                    {current.size}
+                  </motion.p>
+
+                  <motion.div
+                    key={`${current.week}-body`}
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5, ease: EASE, delay: 0.08 }}
+                  >
+                    <h4 className="mt-7 font-display text-2xl font-medium leading-snug text-ink-900 sm:text-[1.75rem]">
+                      {current.title}
+                    </h4>
+                    <p className="mt-3 max-w-[48ch] text-sm leading-relaxed text-slate-body sm:text-base">
+                      {current.body}
+                    </p>
+
+
+                    <div className="mt-8">
+                      <Button variant="primary" size="md" onClick={() => open(current.serviceId)}>
+                        Book {current.scan}
+                      </Button>
+                    </div>
+                  </motion.div>
+                </div>
+
+                {/* Week selector, now under the content it controls.
+                    Pinned, page scroll drives it and the rail is mostly an
+                    indicator. Unpinned — touch and reduced motion — tapping is
+                    the only way to move, so nodes become 44px buttons. */}
                 <div
-                  className={cn(
-                    'relative mx-auto w-full px-1',
-                    pinned ? 'mt-16 max-w-[34rem]' : 'mt-8 max-w-[30rem]',
-                  )}
+                  className={cn('relative mt-9 w-full', pinned ? 'max-w-[34rem]' : 'max-w-[30rem]')}
                   role="tablist"
                   aria-label="Gestational weeks"
                 >
-                  {/* Track sits at node-centre height, inset to the outer centres. */}
                   <span
                     aria-hidden
                     className={cn(
@@ -287,7 +293,7 @@ export const BabyJourney = () => {
                   <motion.span
                     aria-hidden
                     className={cn(
-                      'pointer-events-none absolute h-px origin-left bg-rose-400',
+                      'pointer-events-none absolute h-px origin-left bg-rose-500',
                       pinned
                         ? 'left-[11px] right-[11px] top-[9px]'
                         : 'left-[26px] right-[26px] top-[22px]',
@@ -314,7 +320,7 @@ export const BabyJourney = () => {
                             className={cn(
                               'num grid size-11 shrink-0 place-items-center rounded-full border text-[0.8125rem] transition-all duration-300 active:scale-95',
                               isActive
-                                ? 'border-ink-900 bg-ink-900 font-medium text-cream-100 shadow-lift'
+                                ? 'border-rose-500 bg-rose-500 font-medium text-cream-50'
                                 : isPassed
                                   ? 'border-rose-300 bg-rose-50 text-rose-600'
                                   : 'border-ink-900/20 bg-page text-slate-body',
@@ -340,10 +346,10 @@ export const BabyJourney = () => {
                             className={cn(
                               'mt-[2px] block size-[14px] rounded-full border-[1.5px] transition-all duration-300',
                               isActive
-                                ? 'scale-125 border-rose-500 bg-rose-500 shadow-[0_0_0_4px_var(--color-rose-100)]'
+                                ? 'scale-125 border-rose-500 bg-rose-500'
                                 : isPassed
                                   ? 'border-rose-400 bg-rose-400'
-                                  : 'border-ink-900/25 bg-page group-hover/week:border-rose-400 group-hover/week:bg-rose-100',
+                                  : 'border-ink-900/25 bg-page group-hover/week:border-rose-400',
                             )}
                           />
                           <span
@@ -361,12 +367,8 @@ export const BabyJourney = () => {
                     })}
                   </div>
 
-                  {pinned ? (
-                    <p className="label mt-3 text-center text-[0.6rem] text-slate-muted">
-                      Gestational week
-                    </p>
-                  ) : (
-                    <div className="mt-5 flex items-center justify-center gap-3">
+                  {!pinned && (
+                    <div className="mt-5 flex items-center gap-3">
                       <button
                         type="button"
                         onClick={() => selectStage(Math.max(active - 1, 0))}
@@ -375,14 +377,7 @@ export const BabyJourney = () => {
                         className="grid size-9 place-items-center rounded-full border border-ink-900/15 text-ink-700 transition-transform active:scale-95 disabled:opacity-30"
                       >
                         <svg viewBox="0 0 16 16" aria-hidden className="size-3.5">
-                          <path
-                            d="M10 3L5 8l5 5"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth="1.6"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                          />
+                          <path d="M10 3L5 8l5 5" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
                         </svg>
                       </button>
                       <p className="label text-[0.6rem] text-slate-muted">Tap a week</p>
@@ -394,98 +389,11 @@ export const BabyJourney = () => {
                         className="grid size-9 place-items-center rounded-full border border-ink-900/15 text-ink-700 transition-transform active:scale-95 disabled:opacity-30"
                       >
                         <svg viewBox="0 0 16 16" aria-hidden className="size-3.5">
-                          <path
-                            d="M6 3l5 5-5 5"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth="1.6"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                          />
+                          <path d="M6 3l5 5-5 5" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
                         </svg>
                       </button>
                     </div>
                   )}
-                </div>
-              </motion.div>
-
-              {/* Redesigned Card with Custom Heading Font, Includes List & Magnetic Cursor */}
-              <motion.div
-                className="group relative cursor-pointer overflow-hidden rounded-3xl border border-ink-900/10 bg-card p-7 sm:p-10 shadow-float transition-all hover:border-ink-900/20"
-                initial={{ opacity: 0, y: 28 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={viewportOnce}
-                transition={{ duration: 0.9, ease: EASE, delay: 0.12 }}
-                onPointerEnter={() => setIsCardHovered(true)}
-                onPointerLeave={() => setIsCardHovered(false)}
-                onClick={() => open(current.serviceId)}
-              >
-                <div aria-live="polite">
-                  <div className="flex flex-wrap items-baseline justify-between gap-3">
-                    {/* Week heading in website heading font (Baskervville serif) */}
-                    <motion.h3
-                      key={`${current.week}-label`}
-                      className="num text-4xl leading-[1.08] text-rose-500 sm:text-5xl lg:text-[3.25rem]"
-                      initial={{ opacity: 0, y: 12 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.45, ease: EASE }}
-                    >
-                      {current.week}
-                    </motion.h3>
-
-                    <motion.span
-                      key={`${current.week}-size`}
-                      className="label rounded-full bg-rose-100/80 px-3.5 py-1.5 text-[0.6875rem] font-semibold text-rose-700 uppercase tracking-widest"
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      transition={{ duration: 0.45, ease: EASE, delay: 0.05 }}
-                    >
-                      {current.size}
-                    </motion.span>
-                  </div>
-
-                  <motion.div
-                    key={`${current.week}-body`}
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5, ease: EASE, delay: 0.08 }}
-                    className="mt-6"
-                  >
-                    <h4 className="font-display text-2xl sm:text-3xl font-normal leading-snug tracking-tight text-ink-900">
-                      {current.title}
-                    </h4>
-                    <p className="mt-3 text-sm sm:text-base leading-relaxed text-slate-body max-w-[48ch]">
-                      {current.body}
-                    </p>
-
-                    {/* Action Button */}
-                    <div className="mt-8">
-                      <Button
-                        variant="primary"
-                        size="md"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          open(current.serviceId);
-                        }}
-                      >
-                        Book {current.scan}
-                      </Button>
-                    </div>
-                  </motion.div>
-                </div>
-
-                {/* Progress rail across the six milestones */}
-                <div className="mt-8 flex items-center gap-3 border-t border-ink-900/10 pt-5">
-                  <span className="label text-ink-400">
-                    {String(active + 1).padStart(2, '0')} / {String(STAGE_COUNT).padStart(2, '0')}
-                  </span>
-                  <span className="h-px flex-1 overflow-hidden bg-ink-900/12">
-                    <motion.span
-                      className="block h-px origin-left bg-rose-400"
-                      animate={{ scaleX: (active + 1) / STAGE_COUNT }}
-                      transition={{ duration: 0.5, ease: EASE }}
-                    />
-                  </span>
                 </div>
               </motion.div>
             </div>

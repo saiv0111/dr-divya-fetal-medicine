@@ -44,7 +44,7 @@ export const Testimonials = () => {
   const currentImg = testimonialImages[currentIndex % testimonialImages.length];
 
   return (
-    <section id="testimonials" className="scroll-mt-24 py-10">
+    <section id="testimonials" className="scroll-mt-24 py-11">
       <div className="shell">
         {/* Header: Left aligned title/subtitle & Right aligned Swiper Buttons */}
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6">
@@ -103,7 +103,7 @@ export const Testimonials = () => {
         </div>
 
         {/* Testimonial Feature Card */}
-        <div className="relative mt-8 md:mt-14">
+        <div className="relative mt-8 md:mt-10">
           <div className="relative overflow-hidden rounded-xl sm:rounded-2xl border border-ink-900/10 bg-card p-6 sm:p-10 lg:p-12 shadow-float">
             <AnimatePresence mode="wait" custom={direction}>
               <motion.div

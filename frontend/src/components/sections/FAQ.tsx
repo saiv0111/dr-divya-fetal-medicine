@@ -10,7 +10,7 @@ export const FAQ = () => {
   const { open } = useBooking();
 
   return (
-    <section id="faqs" className="scroll-mt-24 pt-10 pb-20">
+    <section id="faqs" className="scroll-mt-24 py-11">
       <div className="shell">
         <div className="grid gap-12 lg:grid-cols-[0.8fr_1.2fr] lg:gap-20">
           <div className="lg:sticky lg:top-32 lg:self-start">

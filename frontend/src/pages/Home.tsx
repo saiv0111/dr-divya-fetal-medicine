@@ -1,7 +1,6 @@
 import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { Hero } from '@/components/sections/Hero';
-import { TrustMarquee } from '@/components/sections/TrustMarquee';
 import { About } from '@/components/sections/About';
 import { Certifications } from '@/components/sections/Certifications';
 import { AreasOfCare } from '@/components/sections/AreasOfCare';
@@ -26,7 +25,6 @@ export const Home = () => {
     <>
       {/* 1 */}
       <Hero />
-      <TrustMarquee />
       {/* 2 */}
       <About />
       {/* 3 & 4: Combined Credentials & Stats (Infrastructure) */}

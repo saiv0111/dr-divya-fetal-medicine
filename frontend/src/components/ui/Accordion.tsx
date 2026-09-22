@@ -54,7 +54,7 @@ export const Accordion = ({ items, defaultOpen = 0, className }: AccordionProps)
                 onClick={() => setOpen(isOpen ? null : index)}
                 className="group flex w-full items-center justify-between gap-6 py-6 text-left transition-colors duration-300 hover:text-ink-600 md:py-7"
               >
-                <span className="font-display text-xl leading-tight tracking-tight md:text-2xl">
+                <span className="font-display text-[1.02rem] font-medium leading-snug tracking-tight md:text-[1.12rem]">
                   {item.q}
                 </span>
                 <Chevron open={isOpen} />
