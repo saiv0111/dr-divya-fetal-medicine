@@ -4,7 +4,6 @@ import { about, doctor } from '@/data/site';
 import { EASE, viewportOnce } from '@/lib/motion';
 import { Eyebrow } from '@/components/ui/SectionHeading';
 import { SplitWords } from '@/components/ui/SplitWords';
-import { ScrollHighlightText } from '@/components/ui/ScrollHighlightText';
 import { Reveal } from '@/components/ui/Reveal';
 
 export const About = () => {
@@ -57,10 +56,15 @@ export const About = () => {
               className="font-display text-3xl sm:text-4xl lg:text-[2.75rem] leading-[1.12] text-ink-900 w-full"
             />
 
-            <ScrollHighlightText
-              text={about.narrative}
+            <motion.p
               className="mt-9 max-w-[54ch] text-[1.15rem] font-normal leading-[1.6] tracking-[-0.01em] text-ink-900 md:text-[1.3rem]"
-            />
+              initial={{ opacity: 0, y: 16 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={viewportOnce}
+              transition={{ duration: 0.7, ease: EASE }}
+            >
+              {about.narrative}
+            </motion.p>
 
             <Reveal delay={0.1} className="mt-10 border-l-2 border-rose-300 pl-6">
               <p className="font-display text-xl leading-snug text-ink-700 md:text-2xl">

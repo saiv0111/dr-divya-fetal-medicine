@@ -22,29 +22,29 @@ export const doctor = {
 export const practice = {
   name: 'Dr Divya’s Fetal Medicine Centre',
   tagline: 'Fetal Medicine & Women’s Health',
-  phone: '+91 98765 43210',
-  phoneHref: 'tel:+919876543210',
-  whatsappHref: 'https://wa.me/919876543210',
-  email: 'care@drdivyafetalmedicine.com',
+  phone: '+91 90634 30505',
+  phoneHref: 'tel:+919063430505',
+  whatsappHref: 'https://wa.me/919063430505',
+  email: 'contact@drdivyafetalmedicine.com',
+  /** Second published address; both reach the practice. */
+  emailAlt: 'hello@drdivyafetalmedicine.com',
   address: {
-    line1: 'D.No. 5-50/1/A, Shiva Vijaya Ratna Jewel, 2nd Floor',
-    line2: 'Beside Indane Gas, BHEL X Roads, Chanda Nagar',
-    city: 'Hyderabad, Ranga Reddy District, Telangana — 500 050',
+    line1: '2nd Floor (lift access), Manjeera Lane Road',
+    line2: 'Near BR Gas, near Serilingampally bus stop, Chanda Nagar',
+    city: 'Hyderabad, Telangana — 500 050',
   },
+  /**
+   * The practice's own Google Maps pin. `mapsUrl` is the link the clinic
+   * shared; Google refuses to render short links in an iframe, so the embed
+   * below is built from the place name and the exact coordinates that link
+   * resolves to (17.4943237, 78.3174176).
+   */
+  mapsUrl: 'https://maps.app.goo.gl/36S68A71zZYBoNy87',
   mapsEmbedUrl:
-    'https://maps.google.com/maps?q=Chanda+Nagar,+BHEL+X+Roads,+Hyderabad,+Telangana+500050&t=&z=16&ie=UTF8&iwloc=&output=embed',
-  mapsDirectionsUrl:
-    'https://www.google.com/maps/dir/?api=1&destination=Shiva+Vijaya+Ratna+Jewel+BHEL+X+Roads+Chanda+Nagar+Hyderabad+Telangana+500050',
-  hours: [
-    { day: 'Monday – Friday', time: '9:00 AM – 6:00 PM' },
-    { day: 'Saturday', time: '9:00 AM – 2:00 PM' },
-    { day: 'Sunday', time: 'By Appointment' },
-  ],
-  socials: [
-    { label: 'Instagram', href: 'https://instagram.com' },
-    { label: 'LinkedIn', href: 'https://linkedin.com' },
-    { label: 'YouTube', href: 'https://youtube.com' },
-  ],
+    'https://maps.google.com/maps?q=Sri+Sai+Home+Needs,+Chanda+Nagar,+Hyderabad&ll=17.4943237,78.3174176&z=17&hl=en&output=embed',
+  mapsDirectionsUrl: 'https://maps.app.goo.gl/36S68A71zZYBoNy87',
+  hours: [{ day: 'Monday – Saturday', time: '10:00 AM – 8:00 PM' }],
+  socials: [{ label: 'Instagram', href: 'https://instagram.com/drdivya.yourfetaldoctor' }],
 } as const;
 
 /* -------------------------------------------------------------------------- */
@@ -70,14 +70,12 @@ export const hero = {
 } as const;
 
 export const trustMarquee = [
-  'MS Obstetrics & Gynaecology',
-  'Fellowship-trained in fetal medicine',
-  'Nuchal translucency screening',
-  'Fetal echocardiography',
-  'Doppler & growth surveillance',
-  'Genetic counselling',
-  'Twin & multiple pregnancy',
-  'Invasive prenatal diagnosis',
+  'Early Pregnancy Scan',
+  'NT Scan',
+  'TIFFA / Anomaly Scan',
+  'Fetal Echocardiography',
+  '3D / 4D Scans',
+  'Genetic Counselling',
 ] as const;
 
 /* -------------------------------------------------------------------------- */
@@ -92,7 +90,7 @@ export const about = {
     'I trained in fetal medicine because I kept meeting parents handed a report and no explanation. They knew a measurement was flagged; nobody had told them what it meant. That gap is where worry grows, so this practice is built around closing it.',
   signatureLine: 'Fetal Medicine Specialist',
   facts: [
-    { label: 'Practising since', value: '2014' },
+    { label: 'Experience', value: '6 yrs' },
     { label: 'Scans performed', value: '24,000+' },
     { label: 'Consultation length', value: '45 min' },
   ],
@@ -148,10 +146,10 @@ export const certifications = {
 
 export const stats = {
   eyebrow: 'By the numbers',
-  heading: 'Eleven years, measured',
+  heading: 'Six years, measured',
   items: [
-    { value: 24000, suffix: '+', label: 'Scans performed', sub: 'Since 2014' },
-    { value: 11, suffix: ' yrs', label: 'In fetal medicine', sub: 'Exclusive practice' },
+    { value: 24000, suffix: '+', label: 'Scans performed', sub: 'To date' },
+    { value: 6, suffix: ' yrs', label: 'Experience', sub: 'In fetal medicine' },
     { value: 98, suffix: '%', label: 'Would recommend', sub: 'Post-visit survey' },
     { value: 48, suffix: ' hrs', label: 'Referral to appointment', sub: 'Median wait' },
   ],
@@ -196,7 +194,7 @@ export const services = {
       window: '11 – 13+6 weeks',
       duration: '30 min',
       summary:
-        'FMF-certified combined screening: nuchal translucency, nasal bone, Dopplers and early anatomy.',
+        'Combined screening: nuchal translucency, nasal bone, Dopplers and early anatomy.',
       includes: [
         'NT measurement',
         'Combined risk score',
@@ -258,7 +256,7 @@ export const services = {
 } as const;
 
 /* -------------------------------------------------------------------------- */
-/*  6 · Baby's journey  (placeholder content — client copy pending)            */
+/*  6 · Baby's journey                                                       */
 /* -------------------------------------------------------------------------- */
 
 export const journey = {
@@ -266,12 +264,13 @@ export const journey = {
   heading: 'Watch your baby’s journey, week by week',
   intro:
     'Every pregnancy has its own rhythm. Scroll through the milestones, or tap one, to see what each scan looks for.',
-  scrollHint: 'Scroll to watch the journey',
-  /** PLACEHOLDER — replace with the client's final milestone copy. */
+  /** Five stages. `week` is the range the practice publishes; `short` is the
+      single week the rail is labelled with. */
   stages: [
     {
-      week: 'Week 8',
-      size: 'Size of a raspberry',
+      week: 'Weeks 5–8',
+      short: '8',
+      size: 'Size of a cherry',
       title: 'Early Pregnancy Assessment',
       body: 'Confirming the pregnancy is in the right place, finding the heartbeat, and dating it accurately — every measurement that follows depends on this one.',
       scan: 'Early Pregnancy Scan',
@@ -279,8 +278,9 @@ export const journey = {
       includes: ['Location & number', 'Cardiac activity', 'Accurate dating', 'Written report'],
     },
     {
-      week: 'Week 12',
-      size: 'Size of a lime',
+      week: 'Weeks 9–12',
+      short: '12',
+      size: 'Size of a strawberry',
       title: 'NT & First Trimester Screening',
       body: 'Nuchal translucency, nasal bone and Dopplers, combined with blood markers into a single clear risk assessment — inside a narrow, unmissable window.',
       scan: 'NT Scan',
@@ -288,8 +288,9 @@ export const journey = {
       includes: ['NT measurement', 'Combined risk score', 'Pre-eclampsia risk', 'Early anomaly survey'],
     },
     {
-      week: 'Week 20',
-      size: 'Size of a banana',
+      week: 'Weeks 16–24',
+      short: '24',
+      size: 'Size of an orange',
       title: 'Detailed Anomaly Scan',
       body: 'Every organ system reviewed in turn, from the four chambers of the heart to the full length of the spine. The most thorough examination of your pregnancy.',
       scan: 'Anomaly Scan',
@@ -297,26 +298,19 @@ export const journey = {
       includes: ['Head to toe anatomy', 'Cardiac outflows', 'Placenta & cord', 'Cervical length'],
     },
     {
-      week: 'Week 28',
-      size: 'Size of an aubergine',
+      week: 'Weeks 28–36',
+      short: '36',
+      size: 'Size of a pineapple',
       title: 'Growth & Wellbeing',
-      body: 'Plotting growth against a personalised centile and reading placental Dopplers to check the supply is keeping pace with an increasingly demanding baby.',
+      body: 'Plotting growth against a personalised centile and reading placental Dopplers, then — closer to 36 weeks — the position, fluid volume and cord flow your delivery plan is actually built from.',
       scan: 'Growth & Doppler Scan',
       serviceId: 'growth-doppler',
-      includes: ['Estimated fetal weight', 'Centile trend', 'Doppler indices', 'Amniotic fluid'],
+      includes: ['Estimated fetal weight', 'Centile trend', 'Doppler indices', 'Position & fluid volume'],
     },
     {
-      week: 'Week 36',
-      size: 'Size of a papaya',
-      title: 'Pre-Delivery Assessment',
-      body: 'Position, fluid volume, estimated weight and cord flow — the findings your delivery plan is actually built from.',
-      scan: 'Growth & Presentation Scan',
-      serviceId: 'growth-doppler',
-      includes: ['Position & fluid volume', 'Estimated fetal weight', 'Cord flow indices', 'Delivery timing'],
-    },
-    {
-      week: 'Week 40',
-      size: 'Full term',
+      week: 'Weeks 37–40',
+      short: '40',
+      size: 'Size of a watermelon',
       title: 'Ready to Meet You',
       body: 'Final wellbeing checks, coordinated closely with your obstetric team as labour approaches.',
       scan: 'Final Wellbeing Scan',
@@ -369,11 +363,10 @@ export const location = {
   eyebrow: 'Find us',
   heading: 'One clinic, easy to reach',
   intro:
-    'Ground-level access, a quiet waiting area kept deliberately small, and parking in the same building.',
+    'On the second floor with lift access, and a quiet waiting area kept deliberately small.',
   amenities: [
-    'Basement parking (validated)',
-    '400m from Indiranagar metro',
-    'Step-free access & lift',
+    '2nd floor · lift access',
+    'Near Serilingampally bus stop',
     'Private changing room',
     'Partner always welcome',
   ],

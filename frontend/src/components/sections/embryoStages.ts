@@ -1,6 +1,8 @@
 /*
- * GENERATED from design-assets/fetus-journey-assets.svg.
- * Do not hand-edit — re-run the extraction if the source artwork changes.
+ * GENERATED from design-assets/fetus-journey-assets.svg, then trimmed by hand
+ * to the five gestational ranges the practice publishes. The source artwork
+ * holds six drawings; stage-5 (week 36) is folded into the 28-36 range and is
+ * no longer shown. Re-running the extraction will restore all six.
  *
  * The artwork is a flat 3x2 grid of six gestational stages. Each cell is
  * normalised to a common height, centred on (150,150) in a 300x300 viewBox
@@ -14,7 +16,7 @@
  */
 
 export interface EmbryoFrame {
-  /** Gestational age this drawing is shown for. */
+  /** Upper end of the gestational range this drawing is shown for. */
   week: number;
   /** Size relative to the last frame (0-1), monotonically increasing. */
   rel: number;
@@ -34,19 +36,14 @@ export const EMBRYO_FRAMES: EmbryoFrame[] = [
     src: '/journey/stage-2.svg',
   },
   {
-    week: 20,
+    week: 24,
     rel: 0.7557,
     src: '/journey/stage-3.svg',
   },
   {
-    week: 28,
+    week: 36,
     rel: 0.8592,
     src: '/journey/stage-4.svg',
-  },
-  {
-    week: 36,
-    rel: 0.9295,
-    src: '/journey/stage-5.svg',
   },
   {
     week: 40,

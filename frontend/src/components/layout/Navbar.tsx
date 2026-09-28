@@ -16,9 +16,9 @@ const Wordmark = () => (
     aria-label={`${practice.name} — home`}
   >
     <img
-      src="/fetal-medicine-logo.png"
+      src="/brand-logo.png"
       alt={practice.name}
-      className="h-10 w-auto object-contain brightness-0 dark:brightness-100"
+      className="h-10 w-auto object-contain"
     />
   </Link>
 );

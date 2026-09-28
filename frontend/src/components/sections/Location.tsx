@@ -136,6 +136,12 @@ export const Location = () => (
                 >
                   {practice.email}
                 </a>
+                <a
+                  href={`mailto:${practice.emailAlt}`}
+                  className="text-[0.875rem] text-cream-100/60 transition-colors duration-300 hover:text-rose-300"
+                >
+                  {practice.emailAlt}
+                </a>
               </div>
             </div>
           </Reveal>

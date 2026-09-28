@@ -5,10 +5,10 @@ import { Counter } from '@/components/ui/Counter';
 
 const credentialBadges = [
   {
-    tag: 'FMF',
-    sub: 'UK',
-    title: 'FMF UK Certified',
-    body: 'Licensed to Fetal Medicine Foundation (London) standards, with annual measurement audit.',
+    tag: 'FELLOW',
+    sub: '2 YRS',
+    title: 'Fellowship in Fetal Medicine (2 Years)',
+    body: 'Trained under the esteemed guidance of Dr. Chinmayee Ratha.',
   },
   {
     tag: 'ISUOG',
@@ -23,8 +23,8 @@ const credentialBadges = [
     body: 'High-resolution 2D, colour & pulsed-wave Doppler, 4D volume imaging and cardiac presets.',
   },
   {
-    tag: 'FMF',
-    sub: 'CARE',
+    tag: 'CARE',
+    sub: '1:1',
     title: 'Counselling That Slows Down',
     body: 'Findings explained in plain language, written down before you leave, and revisited as needed.',
   },
@@ -59,7 +59,7 @@ export const Certifications = () => {
             </h2>
           </div>
           <p className="max-w-xs text-xs sm:text-sm leading-relaxed text-cream-100/60 md:text-right">
-            Over a decade of specialized care, held to international fetal medicine standards.
+            Six years in fetal medicine, practised as a subspecialty rather than a sideline.
           </p>
         </div>
 

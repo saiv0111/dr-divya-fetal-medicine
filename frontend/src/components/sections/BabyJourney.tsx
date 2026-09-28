@@ -9,6 +9,7 @@ import {
   useSpring,
 } from 'framer-motion';
 import { journey } from '@/data/site';
+import { BABY_SIZES } from './babySizes';
 import { EASE, viewportOnce } from '@/lib/motion';
 import { cn } from '@/lib/utils';
 import { useIsDesktop } from '@/hooks/useMediaQuery';
@@ -141,7 +142,6 @@ export const BabyJourney = () => {
   const pinned = isDesktop && !reduced;
 
   const [active, setActive] = useState(0);
-  const [hintHidden, setHintHidden] = useState(false);
   const [isCardHovered, setIsCardHovered] = useState(false);
   const [cursor, setCursor] = useState({ x: 0, y: 0 });
 
@@ -159,7 +159,6 @@ export const BabyJourney = () => {
     positionRef.current = position;
     stage.apply(position);
     setActive(Math.round(position));
-    setHintHidden(progress > 0.03);
   });
 
   const tweenTo = useCallback(
@@ -203,11 +202,21 @@ export const BabyJourney = () => {
   }, [pinned, stage]);
 
   const current = journey.stages[active] ?? journey.stages[0]!;
+  const size = BABY_SIZES[active] ?? BABY_SIZES[0]!;
 
   return (
     <section
       id="journey"
-      className="relative scroll-mt-24 pb-10"
+      className={cn(
+        'relative scroll-mt-24 pb-10',
+        // The pinned pane is a full viewport tall, so when the pin finishes the
+        // section ends at the bottom of the screen — leaving half a viewport of
+        // white below the artwork, far more than the ~160px between every other
+        // section. Pane height cannot fix it (the section still ends at the
+        // viewport bottom), so pull the next section up by whatever the centred
+        // content leaves behind. In vh so it adapts to the window height.
+        pinned && 'mb-[calc(17rem-50vh)]',
+      )}
       onPointerMove={(event) => {
         if (event.pointerType === 'mouse') setCursor({ x: event.clientX, y: event.clientY });
       }}
@@ -232,12 +241,12 @@ export const BabyJourney = () => {
           className={cn(
             'flex',
             pinned
-              ? 'sticky top-0 h-screen items-start overflow-hidden pt-10'
+              ? 'sticky top-0 h-screen items-center overflow-hidden'
               : 'items-center py-14',
           )}
         >
           <div className="shell w-full">
-            <div className="grid items-center gap-12 lg:grid-cols-[0.9fr_1.1fr] lg:gap-[60px]">
+            <div className="grid items-center gap-12 lg:grid-cols-[0.92fr_1.08fr] lg:gap-[60px]">
               {/* Scan Stage + Week Pills */}
               <motion.div
                 initial={{ opacity: 0, scale: 0.94 }}
@@ -245,19 +254,76 @@ export const BabyJourney = () => {
                 viewport={viewportOnce}
                 transition={{ duration: 0.9, ease: EASE }}
               >
-                <div className="relative mx-auto flex aspect-square w-full max-w-[27.5rem] items-center justify-center">
-                  <ScanStage stageRef={stageRef} />
+                {/* Fruit beside the baby, both to scale against each other,
+                    with the size line underneath. The fruit carries the sense
+                    of size that a drawing on its own cannot. */}
+                <div className="relative mx-auto w-full max-w-[36rem]">
+                  {/* Each drawing centres inside an equal half, so the pair is
+                      symmetric about the column's centre line. Centring the two
+                      boxes instead put the pair ~40px right of the caption: the
+                      fruit's well is far wider than the scan's box, and neither
+                      matches the ink inside it. min-w-0 lets the well's
+                      transparent padding overflow its half rather than widen it. */}
+                  <motion.div
+                    className="flex items-center justify-center gap-2 sm:gap-4"
+                    initial={false}
+                    animate={{ x: `${size.nudge}rem` }}
+                    transition={{ duration: 0.4, ease: EASE }}
+                  >
+                    <div className="flex min-w-0 flex-1 justify-center">
+                      <div className="relative size-[10rem] shrink-0 sm:size-[17.25rem]">
+                        {BABY_SIZES.map((item, index) => (
+                          <motion.img
+                            key={item.src + index}
+                            src={item.src}
+                            alt=""
+                            aria-hidden
+                            width={400}
+                            height={400}
+                            decoding="async"
+                            loading="eager"
+                            className="absolute inset-0 m-auto object-contain"
+                            style={{
+                              width: `${item.scale * 100}%`,
+                              height: `${item.scale * 100}%`,
+                            }}
+                            initial={false}
+                            animate={{
+                              opacity: index === active ? 1 : 0,
+                              scale: index === active ? 1 : 0.85,
+                            }}
+                            transition={{ duration: 0.4, ease: EASE }}
+                          />
+                        ))}
+                      </div>
+                    </div>
 
-                  {pinned && (
-                    <span
-                      className={cn(
-                        'label absolute -bottom-9 left-1/2 -translate-x-1/2 whitespace-nowrap text-ink-500 transition-opacity duration-500',
-                        hintHidden ? 'opacity-0' : 'opacity-60',
-                      )}
+                    <div className="flex min-w-0 flex-1 justify-center">
+                      <div className="relative flex aspect-square w-[4rem] items-center justify-center sm:w-[7rem]">
+                        <ScanStage stageRef={stageRef} />
+                      </div>
+                    </div>
+                  </motion.div>
+                </div>
+
+                {/* The size line is the only copy on this side; the week
+                    selector now lives in the card. */}
+                <div className={cn('text-center', pinned ? 'mt-4' : 'mt-5')}>
+                  <p className="label text-[0.55rem] text-rose-500/80">
+                    About the size of a{/^[aeiou]/i.test(size.fruit) ? 'n' : ''} {size.fruit.toLowerCase()}
+                  </p>
+                  <AnimatePresence mode="wait">
+                    <motion.p
+                      key={active}
+                      className="mt-1.5 text-[0.82rem] leading-relaxed text-ink-500"
+                      initial={{ opacity: 0, y: 6 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -6 }}
+                      transition={{ duration: 0.35, ease: EASE }}
                     >
-                      {journey.scrollHint} ↓
-                    </span>
-                  )}
+                      {size.line}
+                    </motion.p>
+                  </AnimatePresence>
                 </div>
 
                 {/* Week selector.
@@ -269,7 +335,7 @@ export const BabyJourney = () => {
                 <div
                   className={cn(
                     'relative mx-auto w-full px-1',
-                    pinned ? 'mt-16 max-w-[34rem]' : 'mt-8 max-w-[30rem]',
+                    pinned ? 'mt-6 max-w-[36rem]' : 'mt-5 max-w-[30rem]',
                   )}
                   role="tablist"
                   aria-label="Gestational weeks"
@@ -320,7 +386,7 @@ export const BabyJourney = () => {
                                   : 'border-ink-900/20 bg-page text-slate-body',
                             )}
                           >
-                            {item.week.replace('Week ', '')}
+                            {item.short}
                           </button>
                         );
                       }
@@ -354,7 +420,7 @@ export const BabyJourney = () => {
                                 : 'text-slate-muted group-hover/week:text-rose-500',
                             )}
                           >
-                            {item.week.replace('Week ', '')}
+                            {item.short}
                           </span>
                         </button>
                       );
@@ -421,7 +487,7 @@ export const BabyJourney = () => {
                 onClick={() => open(current.serviceId)}
               >
                 <div aria-live="polite">
-                  <div className="flex flex-wrap items-baseline justify-between gap-3">
+                  <div className="flex flex-wrap items-baseline gap-3">
                     {/* Week heading in website heading font (Baskervville serif) */}
                     <motion.h3
                       key={`${current.week}-label`}
@@ -433,15 +499,6 @@ export const BabyJourney = () => {
                       {current.week}
                     </motion.h3>
 
-                    <motion.span
-                      key={`${current.week}-size`}
-                      className="label rounded-full bg-rose-100/80 px-3.5 py-1.5 text-[0.6875rem] font-semibold text-rose-700 uppercase tracking-widest"
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      transition={{ duration: 0.45, ease: EASE, delay: 0.05 }}
-                    >
-                      {current.size}
-                    </motion.span>
                   </div>
 
                   <motion.div
@@ -474,7 +531,7 @@ export const BabyJourney = () => {
                   </motion.div>
                 </div>
 
-                {/* Progress rail across the six milestones */}
+                {/* Progress rail across the milestones */}
                 <div className="mt-8 flex items-center gap-3 border-t border-ink-900/10 pt-5">
                   <span className="label text-ink-400">
                     {String(active + 1).padStart(2, '0')} / {String(STAGE_COUNT).padStart(2, '0')}
