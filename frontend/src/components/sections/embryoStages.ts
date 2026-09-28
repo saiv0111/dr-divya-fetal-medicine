@@ -1,8 +1,11 @@
 /*
- * GENERATED from design-assets/fetus-journey-assets.svg, then trimmed by hand
- * to the five gestational ranges the practice publishes. The source artwork
- * holds six drawings; stage-5 (week 36) is folded into the 28-36 range and is
- * no longer shown. Re-running the extraction will restore all six.
+ * GENERATED from design-assets/fetus-journey-assets.svg. Five of the six drawings are
+ * used, one per gestational range; stage-5 falls inside the 28-36 range and is
+ * not shown separately.
+ *
+ * The viewBox of each file has been cropped to the drawing's ink; the source
+ * artwork left ~69% of the canvas empty, which made the baby read as far
+ * smaller than the fruit beside it. Re-running the extraction will undo that.
  *
  * The artwork is a flat 3x2 grid of six gestational stages. Each cell is
  * normalised to a common height, centred on (150,150) in a 300x300 viewBox
@@ -16,7 +19,7 @@
  */
 
 export interface EmbryoFrame {
-  /** Upper end of the gestational range this drawing is shown for. */
+  /** The gestational week this drawing is shown for. */
   week: number;
   /** Size relative to the last frame (0-1), monotonically increasing. */
   rel: number;

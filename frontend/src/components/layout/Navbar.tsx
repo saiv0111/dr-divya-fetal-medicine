@@ -18,7 +18,7 @@ const Wordmark = () => (
     <img
       src="/brand-logo.png"
       alt={practice.name}
-      className="h-10 w-auto object-contain"
+      className="h-[50px] w-auto object-contain"
     />
   </Link>
 );

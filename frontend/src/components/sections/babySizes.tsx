@@ -35,35 +35,40 @@ export const BABY_SIZES: BabySize[] = [
     fruit: 'Cherry',
     src: '/journey/fruit-cherry.png',
     scale: 0.449,
-    nudge: 0.06,
-    line: 'Your baby is as tiny as a cherry — but the heart has already started to whisper its first beats.',
+    nudge: -0.06,
+    line:
+      'Your baby is as tiny as a cherry — but the heart has already started to whisper its first beats.',
   },
   {
     fruit: 'Strawberry',
     src: '/journey/fruit-strawberry.png',
     scale: 0.703,
-    nudge: -0.13,
-    line: 'Now as big as a strawberry. Your baby is starting to stretch and wiggle, and tiny fingers and toes are forming beautifully.',
+    nudge: 0.13,
+    line:
+      'Now as big as a strawberry. Your baby is starting to stretch and wiggle, and tiny fingers and toes are forming beautifully.',
   },
   {
     fruit: 'Orange',
     src: '/journey/fruit-orange.png',
     scale: 1,
-    nudge: 0.19,
-    line: 'As big as an orange. Your baby can now hear your voice, and little kicks may soon become your favourite feeling.',
+    nudge: -0.19,
+    line:
+      'As big as an orange. Your baby can now hear your voice, and little kicks may soon become your favourite feeling.',
   },
   {
     fruit: 'Pineapple',
     src: '/journey/fruit-pineapple.png',
-    scale: 0.9,
-    nudge: -0.81,
-    line: 'Now the size of a pineapple. Your baby is gaining strength and those tiny lungs are maturing beautifully.',
+    scale: 0.900,
+    nudge: 0.81,
+    line:
+      'Now the size of a pineapple. Your baby is gaining strength and those tiny lungs are maturing beautifully.',
   },
   {
     fruit: 'Watermelon',
     src: '/journey/fruit-watermelon.png',
     scale: 0.858,
     nudge: 0,
-    line: 'As big as a watermelon. Your little miracle is ready to say hello.',
+    line:
+      'As big as a watermelon. Your little miracle is ready to say hello.',
   },
 ];

@@ -28,7 +28,7 @@ export const About = () => {
               <Reveal scale direction="none" className="relative">
                 <div className="relative overflow-hidden rounded-3xl border border-ink-900/10 bg-ink-950 shadow-float">
                   <img
-                    src="/doc-image.png"
+                    src="/doc-image.jpg"
                     alt={doctor.name}
                     className="aspect-[4/3] w-full object-cover object-top"
                   />

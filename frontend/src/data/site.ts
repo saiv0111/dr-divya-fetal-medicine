@@ -264,15 +264,16 @@ export const journey = {
   heading: 'Watch your baby’s journey, week by week',
   intro:
     'Every pregnancy has its own rhythm. Scroll through the milestones, or tap one, to see what each scan looks for.',
-  /** Five stages. `week` is the range the practice publishes; `short` is the
-      single week the rail is labelled with. */
+  /** Five stages, on the gestational ranges the practice's own size copy uses.
+      `short` is the single week the rail is labelled with. Card wording follows
+      the reference site the section was modelled on. */
   stages: [
     {
       week: 'Weeks 5–8',
       short: '8',
       size: 'Size of a cherry',
       title: 'Early Pregnancy Assessment',
-      body: 'Confirming the pregnancy is in the right place, finding the heartbeat, and dating it accurately — every measurement that follows depends on this one.',
+      body: 'Confirming the pregnancy, checking the heartbeat and dating the pregnancy accurately for everything that follows.',
       scan: 'Early Pregnancy Scan',
       serviceId: 'early-viability',
       includes: ['Location & number', 'Cardiac activity', 'Accurate dating', 'Written report'],
@@ -281,8 +282,8 @@ export const journey = {
       week: 'Weeks 9–12',
       short: '12',
       size: 'Size of a strawberry',
-      title: 'NT & First Trimester Screening',
-      body: 'Nuchal translucency, nasal bone and Dopplers, combined with blood markers into a single clear risk assessment — inside a narrow, unmissable window.',
+      title: 'NT Scan',
+      body: 'A detailed first-trimester scan measuring nuchal translucency to assess chromosomal risk, alongside blood markers.',
       scan: 'NT Scan',
       serviceId: 'nt-scan',
       includes: ['NT measurement', 'Combined risk score', 'Pre-eclampsia risk', 'Early anomaly survey'],
@@ -291,8 +292,8 @@ export const journey = {
       week: 'Weeks 16–24',
       short: '24',
       size: 'Size of an orange',
-      title: 'Detailed Anomaly Scan',
-      body: 'Every organ system reviewed in turn, from the four chambers of the heart to the full length of the spine. The most thorough examination of your pregnancy.',
+      title: 'Anomaly Scan',
+      body: 'The detailed mid-pregnancy scan examining every organ system in depth — the single most important scan of pregnancy.',
       scan: 'Anomaly Scan',
       serviceId: 'anomaly-scan',
       includes: ['Head to toe anatomy', 'Cardiac outflows', 'Placenta & cord', 'Cervical length'],
@@ -301,8 +302,8 @@ export const journey = {
       week: 'Weeks 28–36',
       short: '36',
       size: 'Size of a pineapple',
-      title: 'Growth & Wellbeing',
-      body: 'Plotting growth against a personalised centile and reading placental Dopplers, then — closer to 36 weeks — the position, fluid volume and cord flow your delivery plan is actually built from.',
+      title: 'Growth & Wellbeing Scan',
+      body: 'Checking growth trends, placental function and fluid levels — then, closer to 36 weeks, confirming position and wellbeing as we build a clear plan for delivery.',
       scan: 'Growth & Doppler Scan',
       serviceId: 'growth-doppler',
       includes: ['Estimated fetal weight', 'Centile trend', 'Doppler indices', 'Position & fluid volume'],
@@ -311,8 +312,8 @@ export const journey = {
       week: 'Weeks 37–40',
       short: '40',
       size: 'Size of a watermelon',
-      title: 'Ready to Meet You',
-      body: 'Final wellbeing checks, coordinated closely with your obstetric team as labour approaches.',
+      title: 'Ready to Meet Your Baby',
+      body: 'Final wellbeing checks and close coordination with your obstetric team as you approach delivery.',
       scan: 'Final Wellbeing Scan',
       serviceId: 'high-risk-consult',
       includes: ['Final wellbeing check', 'Placental grading', 'Obstetric coordination', '24/7 care plan'],

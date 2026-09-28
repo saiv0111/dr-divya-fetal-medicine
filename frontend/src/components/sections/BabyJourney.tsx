@@ -271,6 +271,12 @@ export const BabyJourney = () => {
                     transition={{ duration: 0.4, ease: EASE }}
                   >
                     <div className="flex min-w-0 flex-1 justify-center">
+                      <div className="relative flex aspect-square w-[4rem] items-center justify-center sm:w-[7rem]">
+                        <ScanStage stageRef={stageRef} />
+                      </div>
+                    </div>
+
+                    <div className="flex min-w-0 flex-1 justify-center">
                       <div className="relative size-[10rem] shrink-0 sm:size-[17.25rem]">
                         {BABY_SIZES.map((item, index) => (
                           <motion.img
@@ -295,12 +301,6 @@ export const BabyJourney = () => {
                             transition={{ duration: 0.4, ease: EASE }}
                           />
                         ))}
-                      </div>
-                    </div>
-
-                    <div className="flex min-w-0 flex-1 justify-center">
-                      <div className="relative flex aspect-square w-[4rem] items-center justify-center sm:w-[7rem]">
-                        <ScanStage stageRef={stageRef} />
                       </div>
                     </div>
                   </motion.div>
