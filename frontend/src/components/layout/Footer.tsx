@@ -1,94 +1,10 @@
-import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
 import { motion } from 'framer-motion';
-import { newsletterRequestSchema, type NewsletterRequest } from '@drdivya/shared';
 import { doctor, footer, practice } from '@/data/site';
-import { ApiError, api } from '@/lib/api';
 import { EASE, viewportOnce } from '@/lib/motion';
-import { cn, scrollToId } from '@/lib/utils';
+import { scrollToId } from '@/lib/utils';
 import { scrollTo } from '@/hooks/useLenis';
-import { ArrowIcon } from '@/components/ui/Button';
-import { Honeypot } from '@/components/ui/Field';
 import { useBooking } from '@/components/booking/BookingContext';
-
-const NewsletterForm = () => {
-  const [sent, setSent] = useState<string | null>(null);
-  const {
-    register,
-    handleSubmit,
-    reset,
-    setError,
-    formState: { errors, isSubmitting },
-  } = useForm<NewsletterRequest>({
-    resolver: zodResolver(newsletterRequestSchema),
-    defaultValues: { email: '', company: '' },
-  });
-
-  const onSubmit = handleSubmit(async (values) => {
-    try {
-      const result = await api.subscribe(values);
-      setSent(result.message);
-      reset();
-    } catch (error) {
-      setError('email', {
-        type: 'server',
-        message: error instanceof ApiError ? error.message : 'Please try again.',
-      });
-    }
-  });
-
-  if (sent) {
-    return (
-      <motion.p
-        initial={{ opacity: 0, y: 8 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="rounded-xl border border-cream-100/15 bg-cream-100/5 px-4 py-3.5 text-sm text-cream-100/80"
-      >
-        {sent}
-      </motion.p>
-    );
-  }
-
-  return (
-    <form onSubmit={onSubmit} noValidate className="w-full">
-      <Honeypot {...register('company')} />
-      <div
-        className={cn(
-          'flex items-center gap-2 rounded-full border bg-cream-100/5 py-1.5 pl-5 pr-1.5 transition-colors duration-300 focus-within:border-cream-100/40',
-          errors.email ? 'border-rose-300/70' : 'border-cream-100/18',
-        )}
-      >
-        <label htmlFor="newsletter-email" className="sr-only">
-          Email address
-        </label>
-        <input
-          id="newsletter-email"
-          type="email"
-          autoComplete="email"
-          placeholder="you@example.com"
-          aria-invalid={Boolean(errors.email) || undefined}
-          className="min-w-0 flex-1 bg-transparent text-sm text-cream-50 outline-none placeholder:text-cream-100/35"
-          {...register('email')}
-        />
-        <button
-          type="submit"
-          disabled={isSubmitting}
-          className="grid size-9 shrink-0 place-items-center rounded-full bg-page text-ink-900 transition-transform duration-300 hover:scale-105 disabled:opacity-50"
-          aria-label={footer.newsletter.cta}
-        >
-          <ArrowIcon />
-        </button>
-      </div>
-      {errors.email && (
-        <p role="alert" className="mt-2 pl-5 text-xs text-rose-300">
-          {errors.email.message}
-        </p>
-      )}
-    </form>
-  );
-};
 
 export const Footer = () => {
   const { open } = useBooking();
@@ -108,7 +24,7 @@ export const Footer = () => {
   return (
     <footer className="relative overflow-hidden bg-shell text-cream-100">
       <div className="shell relative z-10 pt-20">
-        <div className="grid gap-14 pb-16 lg:grid-cols-[1.25fr_1fr_1fr_1.2fr] lg:gap-10">
+        <div className="grid gap-14 pb-16 lg:grid-cols-[1.4fr_1fr_1fr] lg:gap-10">
           <div className="max-w-sm">
             <Link to="/" aria-label={practice.name}>
               <img
@@ -132,6 +48,20 @@ export const Footer = () => {
                 {practice.emailAlt}
               </a>
             </div>
+            <ul className="mt-6 flex flex-wrap gap-x-5 gap-y-2">
+              {practice.socials.map((social) => (
+                <li key={social.label}>
+                  <a
+                    href={social.href}
+                    target="_blank"
+                    rel="noreferrer noopener"
+                    className="label link-wipe text-cream-100/50 hover:text-cream-50"
+                  >
+                    {social.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
           </div>
 
           {footer.columns.map((column) => (
@@ -159,27 +89,6 @@ export const Footer = () => {
             </nav>
           ))}
 
-          <div>
-            <p className="label text-cream-100/40">{footer.newsletter.heading}</p>
-            <p className="mb-5 mt-5 text-sm leading-relaxed text-cream-100/60">
-              {footer.newsletter.body}
-            </p>
-            <NewsletterForm />
-            <ul className="mt-7 flex flex-wrap gap-x-5 gap-y-2">
-              {practice.socials.map((social) => (
-                <li key={social.label}>
-                  <a
-                    href={social.href}
-                    target="_blank"
-                    rel="noreferrer noopener"
-                    className="label link-wipe text-cream-100/50 hover:text-cream-50"
-                  >
-                    {social.label}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
         </div>
 
         {/* Oversized wordmark that rises into place as the footer enters view. */}

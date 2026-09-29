@@ -90,8 +90,8 @@ const careData: Record<CareTab, Care> = {
     poster: '/invasive-procedures-poster.jpg',
   },
   review: {
-    badge: 'COUNSELLING / EXPERT REVIEW',
-    title: 'Counselling & Expert Review',
+    badge: 'GENETIC COUNSELLING',
+    title: 'Genetic Counselling',
     subtitle:
       'A second opinion and the time to talk it through, whether a screening result is unclear or a previous pregnancy was difficult.',
     groups: [
@@ -113,9 +113,9 @@ const careData: Record<CareTab, Care> = {
 
 const TABS: { id: CareTab; label: string }[] = [
   { id: 'pregnancy', label: 'Pregnancy & Fetal Medicine' },
-  { id: 'gynaecology', label: 'Gynaecology' },
   { id: 'invasive', label: 'Invasive Procedures' },
-  { id: 'review', label: 'Expert Review' },
+  { id: 'review', label: 'Genetic Counselling' },
+  { id: 'gynaecology', label: 'Gynaecology' },
 ];
 
 export const AreasOfCare = () => {

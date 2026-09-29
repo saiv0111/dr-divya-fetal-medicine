@@ -49,7 +49,7 @@ export const Certifications = () => {
 
       <div className="shell relative z-10">
         {/* Top Header Row (Matching Reference Layout) */}
-        <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between border-b border-cream-100/10 pb-7">
+        <div className="border-b border-cream-100/10 pb-7">
           <div>
             <span className="label text-[0.6875rem] uppercase tracking-widest text-cream-100/50">
               Infrastructure
@@ -58,9 +58,6 @@ export const Certifications = () => {
               Built for scale. Certified for security.
             </h2>
           </div>
-          <p className="max-w-xs text-xs sm:text-sm leading-relaxed text-cream-100/60 md:text-right">
-            Six years in fetal medicine, practised as a subspecialty rather than a sideline.
-          </p>
         </div>
 
         {/* Middle Row: Large Metrics / Stats (Matching Reference Image) */}

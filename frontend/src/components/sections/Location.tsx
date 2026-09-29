@@ -71,7 +71,7 @@ export const Location = () => (
       <SectionHeading
         eyebrow="Find Us"
         heading="One clinic, easy to reach"
-        intro="Ground-level access, a quiet waiting area kept deliberately small, and parking in the same building."
+        intro="On the second floor with lift access, beside Indane Gas at BHEL X Roads — and a quiet waiting area kept deliberately small."
       />
 
       <div className="mt-14 grid gap-6 lg:grid-cols-[0.88fr_1.12fr] lg:gap-8">

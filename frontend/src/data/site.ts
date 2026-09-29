@@ -29,9 +29,9 @@ export const practice = {
   /** Second published address; both reach the practice. */
   emailAlt: 'hello@drdivyafetalmedicine.com',
   address: {
-    line1: '2nd Floor (lift access), Manjeera Lane Road',
-    line2: 'Near BR Gas, near Serilingampally bus stop, Chanda Nagar',
-    city: 'Hyderabad, Telangana — 500 050',
+    line1: 'D.No. 5-50/1/A, Shiva Vijaya Ratna Jewel, 2nd Floor',
+    line2: 'Beside Indane Gas, BHEL X Roads, Chanda Nagar',
+    city: 'Hyderabad, Ranga Reddy District, Telangana — 500 050',
   },
   /**
    * The practice's own Google Maps pin. `mapsUrl` is the link the clinic
@@ -85,13 +85,15 @@ export const trustMarquee = [
 export const about = {
   eyebrow: 'About the doctor',
   heading: 'A ten-minute scan. Lasting understanding.',
-  /** Rendered with a scroll-linked word highlight — keep it to a few sentences. */
+  /** The clinic's own statement of what the practice is for. */
   narrative:
-    'I trained in fetal medicine because I kept meeting parents handed a report and no explanation. They knew a measurement was flagged; nobody had told them what it meant. That gap is where worry grows, so this practice is built around closing it.',
+    'Dr. Divya’s vision is to create a space where advanced fetal care meets warmth, trust, and precision — empowering families with knowledge and confidence during one of life’s most precious journeys.',
+  /** The phrase inside `narrative` to set in bold, as the clinic wrote it. */
+  narrativeEmphasis: 'advanced fetal care meets warmth, trust, and precision',
   signatureLine: 'Fetal Medicine Specialist',
   facts: [
-    { label: 'Experience', value: '6 yrs' },
-    { label: 'Scans performed', value: '24,000+' },
+    { label: 'Experience', value: '6+ yrs' },
+    { label: 'Scans performed', value: '10,000+' },
     { label: 'Consultation length', value: '45 min' },
   ],
   pullQuote: 'A screening result is the start of a conversation, never the end of one.',
@@ -148,8 +150,8 @@ export const stats = {
   eyebrow: 'By the numbers',
   heading: 'Six years, measured',
   items: [
-    { value: 24000, suffix: '+', label: 'Scans performed', sub: 'To date' },
-    { value: 6, suffix: ' yrs', label: 'Experience', sub: 'In fetal medicine' },
+    { value: 10000, suffix: '+', label: 'Scans performed', sub: 'In four years of care' },
+    { value: 6, suffix: '+ yrs', label: 'Experience', sub: 'In fetal medicine' },
     { value: 98, suffix: '%', label: 'Would recommend', sub: 'Post-visit survey' },
     { value: 48, suffix: ' hrs', label: 'Referral to appointment', sub: 'Median wait' },
   ],
@@ -279,7 +281,7 @@ export const journey = {
       includes: ['Location & number', 'Cardiac activity', 'Accurate dating', 'Written report'],
     },
     {
-      week: 'Weeks 9–12',
+      week: 'Weeks 12–16',
       short: '12',
       size: 'Size of a strawberry',
       title: 'NT Scan',
@@ -445,11 +447,6 @@ export const footer = {
   wordmark: 'Dr. Divya',
   blurb:
     'Consultant-led fetal medicine and women’s healthcare. Clear answers, current evidence, and the time to talk it through.',
-  newsletter: {
-    heading: 'Notes from the clinic',
-    body: 'One considered email a month on prenatal screening, new evidence, and what it means for you. No marketing.',
-    cta: 'Subscribe',
-  },
   columns: [
     {
       title: 'Explore',

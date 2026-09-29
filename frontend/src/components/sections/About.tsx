@@ -63,7 +63,18 @@ export const About = () => {
               viewport={viewportOnce}
               transition={{ duration: 0.7, ease: EASE }}
             >
-              {about.narrative}
+              {about.narrative
+                .split(about.narrativeEmphasis)
+                .flatMap((part, i) =>
+                  i === 0
+                    ? [part]
+                    : [
+                        <strong key={i} className="font-semibold">
+                          {about.narrativeEmphasis}
+                        </strong>,
+                        part,
+                      ],
+                )}
             </motion.p>
 
             <Reveal delay={0.1} className="mt-10 border-l-2 border-rose-300 pl-6">
