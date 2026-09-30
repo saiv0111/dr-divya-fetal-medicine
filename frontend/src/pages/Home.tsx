@@ -6,6 +6,7 @@ import { About } from '@/components/sections/About';
 import { Certifications } from '@/components/sections/Certifications';
 import { AreasOfCare } from '@/components/sections/AreasOfCare';
 import { BabyJourney } from '@/components/sections/BabyJourney';
+import { Equipment } from '@/components/sections/Equipment';
 import { Testimonials } from '@/components/sections/Testimonials';
 import { Location } from '@/components/sections/Location';
 import { CTA } from '@/components/sections/CTA';
@@ -36,6 +37,8 @@ export const Home = () => {
       {/* 6 */}
       <BabyJourney />
       {/* 7 */}
+      <Equipment />
+      {/* 8 */}
       <Testimonials />
       {/* 8 */}
       <Location />

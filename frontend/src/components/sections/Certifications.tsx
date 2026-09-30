@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { stats } from '@/data/site';
+import { certifications, stats } from '@/data/site';
 import { EASE, viewportOnce } from '@/lib/motion';
 import { Counter } from '@/components/ui/Counter';
 
@@ -52,7 +52,7 @@ export const Certifications = () => {
         <div className="border-b border-cream-100/10 pb-7">
           <div>
             <span className="label text-[0.6875rem] uppercase tracking-widest text-cream-100/50">
-              Infrastructure
+              {certifications.eyebrow}
             </span>
             <h2 className="mt-3 font-display text-3xl sm:text-4xl lg:text-5xl font-normal leading-tight text-cream-50">
               Built for scale. Certified for security.

@@ -258,6 +258,41 @@ export const services = {
 } as const;
 
 /* -------------------------------------------------------------------------- */
+/*  5b · Equipment                                                             */
+/* -------------------------------------------------------------------------- */
+
+export const equipment = {
+  eyebrow: 'Infrastructure',
+  heading: 'Precision imaging for precious beginnings',
+  model: 'GE Voluson Signature 18',
+  modelSuffix: 'Ultrasound System',
+  intro:
+    'We are committed to delivering the highest level of prenatal care through cutting-edge technology. The practice uses the GE Voluson Signature 18 — one of the most advanced imaging platforms built specifically for women’s health and fetal assessment.',
+  advantages: [
+    {
+      title: 'Exceptional image clarity',
+      body: 'Finer detail at every gestation, so smaller structures can be seen and judged with confidence.',
+    },
+    {
+      title: 'Advanced 3D / 4D imaging',
+      body: 'Volume imaging that supports the diagnosis — and gives you a first proper look at your baby.',
+    },
+    {
+      title: 'Precision Doppler studies',
+      body: 'Sensitive colour and pulsed-wave Doppler for reading placental and fetal blood flow accurately.',
+    },
+    {
+      title: 'Faster, more accurate diagnosis',
+      body: 'Shorter scans with less repetition, and findings you can be told about the same day.',
+    },
+  ],
+  /** Product shot, trimmed to the machine and served as WebP: the transparent
+      PNG of the same crop was 834 KB against 108 KB here. */
+  image: '/voluson-signature-18.webp' as string | null,
+  imageAlt: 'The GE Voluson Signature 18 ultrasound system in the scanning room',
+} as const;
+
+/* -------------------------------------------------------------------------- */
 /*  6 · Baby's journey                                                       */
 /* -------------------------------------------------------------------------- */
 
