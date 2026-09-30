@@ -112,7 +112,7 @@ export const Equipment = () => (
         <Reveal scale direction="none" className="relative lg:h-full">
           <div className="relative overflow-hidden rounded-3xl border border-ink-900/10 bg-white shadow-float lg:absolute lg:inset-0">
             {equipment.image ? (
-              <div className="relative flex h-[26rem] w-full items-center justify-center p-6 pb-12 sm:h-[34rem] sm:p-8 sm:pb-14 lg:h-full lg:p-4 lg:pb-10">
+              <div className="relative flex h-[26rem] w-full items-center justify-center p-6 pb-12 sm:h-[34rem] sm:p-8 sm:pb-14 lg:h-full lg:p-10 lg:pb-14">
                 <img
                   src={equipment.image}
                   alt={equipment.imageAlt}
