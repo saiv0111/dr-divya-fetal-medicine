@@ -24,7 +24,7 @@ export const Hero = () => {
           the copy on the left stays legible over the bright bedding. */}
       <div aria-hidden className="pointer-events-none absolute inset-0 -z-10 hidden lg:block">
         <motion.img
-          src="/pregnant-women-hero-new.png"
+          src="/pregnant-women-hero-new.webp"
           alt=""
           width={1431}
           height={1099}
@@ -134,7 +134,7 @@ export const Hero = () => {
             So it becomes its own band underneath instead, at full strength
             with no veil over it. */}
         <motion.img
-          src="/pregnant-women-hero-new.png"
+          src="/pregnant-women-hero-new.webp"
           alt="An expectant mother seated on a bed, resting her hands on her bump"
           width={1431}
           height={1099}

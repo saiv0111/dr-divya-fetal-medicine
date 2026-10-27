@@ -10,6 +10,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import compression from 'compression';
 import express from 'express';
+import rateLimit from 'express-rate-limit';
 import { createEnquiryHandler } from '../api/_lib/node-adapter';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
@@ -18,7 +19,28 @@ const port = Number(process.env.PORT ?? 3000);
 
 const app = express();
 app.disable('x-powered-by');
+// Exactly one proxy in front of us (EasyPanel's Traefik), so req.ip is the
+// visitor rather than the proxy. Without this every request shares one address
+// and the rate limiter below would lock out the whole internet at once.
+app.set('trust proxy', 1);
 app.use(compression());
+
+/** 8 writes per 15 minutes per IP — the limit the Express version used before
+ *  the move to serverless dropped it (see "Known gaps" in README.md). A real
+ *  patient sends one enquiry; anything near this is a bot. */
+const enquiryLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  limit: 8,
+  standardHeaders: 'draft-7',
+  legacyHeaders: false,
+  message: {
+    ok: false,
+    error: {
+      code: 'too_many_requests',
+      message: 'Too many requests just now. Please try again shortly, or call the clinic.',
+    },
+  },
+});
 
 // The same security headers vercel.json sets, kept identical off-Vercel.
 app.use((_req, res, next) => {
@@ -36,9 +58,9 @@ app.get('/api/health', (_req, res) => {
 // No body parser on purpose: the adapter reads and size-limits the raw stream
 // itself, exactly as it does on Vercel. Adding express.json() here would drain
 // the stream first and the handler would see an empty body.
-app.all('/api/appointments', createEnquiryHandler('appointment'));
-app.all('/api/contact', createEnquiryHandler('contact'));
-app.all('/api/newsletter', createEnquiryHandler('newsletter'));
+app.all('/api/appointments', enquiryLimiter, createEnquiryHandler('appointment'));
+app.all('/api/contact', enquiryLimiter, createEnquiryHandler('contact'));
+app.all('/api/newsletter', enquiryLimiter, createEnquiryHandler('newsletter'));
 
 // An unknown /api/* path answers JSON rather than falling through to the SPA.
 app.use('/api', (_req, res) => {
@@ -55,6 +77,14 @@ app.use(
       // Hashed build output, same immutable caching vercel.json gives /assets.
       if (filePath.includes(`${path.sep}assets${path.sep}`)) {
         res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
+        return;
+      }
+      // Images, video and fonts from public/ keep their filenames across
+      // deploys, so they cannot be immutable — a day is long enough to spare
+      // repeat visitors a revalidation round trip per asset, and short enough
+      // that a replaced photo appears without anyone clearing their cache.
+      if (/\.(webp|png|jpe?g|svg|ico|mp4|webm|woff2?)$/i.test(filePath)) {
+        res.setHeader('Cache-Control', 'public, max-age=86400');
       }
     },
   }),

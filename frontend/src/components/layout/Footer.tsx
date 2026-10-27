@@ -28,7 +28,7 @@ export const Footer = () => {
           <div className="max-w-sm">
             <Link to="/" aria-label={practice.name}>
               <img
-                src="/brand-logo.png"
+                src="/brand-logo.webp"
                 alt={practice.name}
                 className="h-12 w-auto object-contain"
               />

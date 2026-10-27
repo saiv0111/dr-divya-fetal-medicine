@@ -6,10 +6,10 @@ import { Eyebrow } from '@/components/ui/SectionHeading';
 import { SplitWords } from '@/components/ui/SplitWords';
 
 const testimonialImages = [
-  '/patient_portrait_ananya_rohit.png',
-  '/patient_portrait_priya.png',
-  '/patient_portrait_sneha.png',
-  '/patient_portrait_meera_arjun.png',
+  '/patient_portrait_ananya_rohit.webp',
+  '/patient_portrait_priya.webp',
+  '/patient_portrait_sneha.webp',
+  '/patient_portrait_meera_arjun.webp',
 ];
 
 const Star = ({ className }: { className?: string }) => (

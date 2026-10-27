@@ -33,7 +33,7 @@ export interface BabySize {
 export const BABY_SIZES: BabySize[] = [
   {
     fruit: 'Cherry',
-    src: '/journey/fruit-cherry.png',
+    src: '/journey/fruit-cherry.webp',
     scale: 0.449,
     nudge: -0.06,
     line:
@@ -41,7 +41,7 @@ export const BABY_SIZES: BabySize[] = [
   },
   {
     fruit: 'Strawberry',
-    src: '/journey/fruit-strawberry.png',
+    src: '/journey/fruit-strawberry.webp',
     scale: 0.703,
     nudge: 0.13,
     line:
@@ -49,7 +49,7 @@ export const BABY_SIZES: BabySize[] = [
   },
   {
     fruit: 'Orange',
-    src: '/journey/fruit-orange.png',
+    src: '/journey/fruit-orange.webp',
     scale: 1,
     nudge: -0.19,
     line:
@@ -57,7 +57,7 @@ export const BABY_SIZES: BabySize[] = [
   },
   {
     fruit: 'Pineapple',
-    src: '/journey/fruit-pineapple.png',
+    src: '/journey/fruit-pineapple.webp',
     scale: 0.900,
     nudge: 0.81,
     line:
@@ -65,7 +65,7 @@ export const BABY_SIZES: BabySize[] = [
   },
   {
     fruit: 'Watermelon',
-    src: '/journey/fruit-watermelon.png',
+    src: '/journey/fruit-watermelon.webp',
     scale: 0.858,
     nudge: 0,
     line:

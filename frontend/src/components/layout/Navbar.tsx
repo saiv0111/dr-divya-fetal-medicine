@@ -16,7 +16,7 @@ const Wordmark = () => (
     aria-label={`${practice.name} — home`}
   >
     <img
-      src="/brand-logo.png"
+      src="/brand-logo.webp"
       alt={practice.name}
       className="h-[56px] w-auto object-contain"
     />
