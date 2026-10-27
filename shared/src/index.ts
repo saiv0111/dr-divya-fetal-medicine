@@ -60,10 +60,17 @@ export const appointmentRequestSchema = z.object({
       const picked = new Date(`${value}T00:00:00`);
       return !Number.isNaN(picked.getTime()) && picked >= today;
     }, 'Please choose today or a future date'),
-  weeksPregnant: z
-    .union([z.coerce.number().int().min(0, 'Enter 0–45').max(45, 'Enter 0–45'), z.literal('')])
-    .optional()
-    .transform((value) => (value === '' || value === undefined ? undefined : Number(value))),
+  // An untouched input posts "", and Number("") is 0 — so the empty case is
+  // mapped out BEFORE coercion. A union with z.coerce.number() first cannot do
+  // this: it matches "" as 0 and the empty branch never runs, which is how a
+  // blank field reached the clinic's inbox as "Weeks pregnant: 0".
+  // `.optional()` belongs on the INNER schema: an outer one tests the raw input,
+  // which is "" rather than undefined, so the blank value would still reach the
+  // number check and fail as NaN.
+  weeksPregnant: z.preprocess(
+    (value) => (value === '' || value === null ? undefined : value),
+    z.coerce.number().int().min(0, 'Enter 0–45').max(45, 'Enter 0–45').optional(),
+  ),
   message: z.string().trim().max(1000, 'Please keep this under 1000 characters').optional(),
   consent: z.literal(true, {
     errorMap: () => ({ message: 'Please accept the privacy notice to continue' }),

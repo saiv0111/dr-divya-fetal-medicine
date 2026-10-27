@@ -38,6 +38,7 @@ const LABELS: Record<string, string> = {
   preferredDate: 'Preferred date',
   message: 'Message',
   referredBy: 'Referred by',
+  consent: 'Consent given',
 };
 
 /** A plain-text body a front-desk reader can scan without decoding JSON. */
@@ -62,6 +63,62 @@ const getTransport = () => {
   return transport;
 };
 
+/** Also in frontend/src/data/site.ts — change both together. The API cannot
+ *  import from the frontend workspace, and this is not worth a shared constant
+ *  until a third copy appears. */
+const CLINIC_PHONE = '+91 90634 30505';
+
+const ACK_SUBJECT: Record<Delivery['kind'], string> = {
+  appointment: 'We have your appointment request',
+  contact: 'Thanks for getting in touch',
+  newsletter: "You're subscribed",
+};
+
+const ACK_INTRO: Record<Delivery['kind'], string> = {
+  appointment: "We've got your request. Our front desk will call you within one working day.",
+  contact: "We've got your message and will reply within one working day.",
+  newsletter: "You're subscribed. Look out for the next issue.",
+};
+
+/** A short confirmation for the person who filled the form. Deliberately thin:
+ *  it repeats nothing clinical, only that the request arrived. */
+const ackBody = ({ kind, reference, payload }: Delivery) => {
+  const first = typeof payload.name === 'string' ? payload.name.trim().split(/\s+/)[0] : '';
+  return [
+    first ? `Hello ${first},` : 'Hello,',
+    '',
+    ACK_INTRO[kind],
+    ...(kind === 'newsletter' ? [] : ['', `Reference: ${reference}`]),
+    '',
+    `For anything urgent, please call ${CLINIC_PHONE}`,
+    '',
+    "Dr. Divya's Fetal Medicine Centre",
+  ].join('\n');
+};
+
+/** Confirms receipt to the enquirer. Failures here must never fail the request:
+ *  the clinic's copy is the one that matters, and a bounced acknowledgement is
+ *  not a reason to tell a patient their booking did not go through. */
+const acknowledge = async (delivery: Delivery): Promise<void> => {
+  const to = delivery.payload.email;
+  if (typeof to !== 'string' || !to) return;
+
+  try {
+    await getTransport().sendMail({
+      from: FROM_EMAIL,
+      to,
+      replyTo: NOTIFY_EMAIL,
+      subject: ACK_SUBJECT[delivery.kind],
+      text: ackBody(delivery),
+    });
+  } catch (error) {
+    console.error(`[${delivery.kind}] acknowledgement to enquirer failed`, {
+      reference: delivery.reference,
+      error,
+    });
+  }
+};
+
 export const deliver = async (delivery: Delivery): Promise<void> => {
   if (!SMTP_URL || !NOTIFY_EMAIL) {
     // Losing a patient's appointment request silently is far worse than an
@@ -81,6 +138,8 @@ export const deliver = async (delivery: Delivery): Promise<void> => {
     return;
   }
 
+  // The clinic's copy first: if this throws, the caller returns an error and
+  // the visitor is told to phone instead of being left thinking it arrived.
   await getTransport().sendMail({
     from: FROM_EMAIL,
     to: NOTIFY_EMAIL,
@@ -88,4 +147,6 @@ export const deliver = async (delivery: Delivery): Promise<void> => {
     subject: delivery.subject,
     text: format(delivery),
   });
+
+  await acknowledge(delivery);
 };
