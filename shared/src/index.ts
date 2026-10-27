@@ -45,6 +45,20 @@ export const serviceIdSchema = z.enum(SERVICE_IDS, {
   errorMap: () => ({ message: 'Please choose a service' }),
 });
 
+/** Readable names for the ids above. Lives here rather than in the frontend's
+ *  site data because the API needs them too, and emails that say
+ *  "Service: anomaly-scan" read like a database dump. */
+export const SERVICE_LABELS: Record<(typeof SERVICE_IDS)[number], string> = {
+  'early-viability': 'Early Viability Scan',
+  'nt-scan': 'NT & First Trimester Screening',
+  'anomaly-scan': 'Detailed Anomaly Scan',
+  'fetal-echo': 'Fetal Echocardiography',
+  'growth-doppler': 'Growth & Doppler Surveillance',
+  'high-risk-consult': 'High-Risk Pregnancy Consult',
+  'genetic-counselling': 'Genetic Counselling & Testing',
+  other: 'Something else',
+};
+
 export const appointmentRequestSchema = z.object({
   name: trimmed(2, 80, 'Full name'),
   email: emailSchema,
